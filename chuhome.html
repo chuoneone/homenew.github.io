@@ -54,9 +54,8 @@
         background: rgba(255, 255, 255, 0.5);
       }
 
-
-       .hero-button-secondary {
-        background-color: #ebd39e; /* emerald-500 */
+      .hero-button-secondary {
+        background-color: #ebd39e; /* custom color */
         color: rgb(0, 0, 0);
         font-weight: 600; /* semibold */
         border-radius: 0.375rem; /* rounded-md */
@@ -64,7 +63,11 @@
         transition: background-color 0.2s ease-in-out;
       }
       .hero-button-secondary:hover {
-        background-color: #eec344; /* emerald-600 */
+        background-color: #eec344; /* custom hover color */
+      }
+      /* Slideshow image transition */
+      #slideshow-image {
+        transition: opacity 0.7s ease-in-out;
       }
     </style>
   </head>
@@ -72,10 +75,10 @@
     <div class="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden">
       <div class="layout-container flex grow flex-col">
         <header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-b-[#f0f2f5] bg-white/80 px-4 sm:px-10 py-3 backdrop-blur-md">
-    <div class="flex items-center gap-4 text-[#111418]">
-      <img src="read.png" alt="Read Logo" class="h-5 w-5"> <!-- 您可以調整 h-5 w-5 來改變 logo 大小 -->
-      <h2 class="text-lg font-bold">CHU PEI YI</h2>
-    </div>
+          <div class="flex items-center gap-4 text-[#111418]">
+            <img src="read.png" alt="Read Logo" class="h-5 w-5">
+            <h2 class="text-lg font-bold">CHU PEI YI</h2>
+          </div>
 
           <div class="md:hidden">
             <button id="hamburger-button" class="text-gray-700 hover:text-blue-600 focus:outline-none">
@@ -96,29 +99,41 @@
 
         <div class="px-4 md:px-40 py-5">
           <div class="max-w-[960px] mx-auto">
-            <!-- Hero Section with Memo -->
-            <div class="flex flex-col gap-6 sm:gap-8 items-center justify-center min-h-[380px] sm:min-h-[360px] bg-cover bg-center bg-no-repeat rounded-lg p-6 text-white text-center relative"
+            <!-- Hero Section with Memo and Slideshow -->
+            <div class="min-h-[380px] sm:min-h-[420px] bg-cover bg-center bg-no-repeat rounded-lg p-4 sm:p-6 text-white relative flex flex-col"
               style='background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.75)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAi0g2nGKg6VXLAAS1OjnmFqiQHAx1AA32Mk53wPpZ7Fo8CQHyg3RhlTWR8R_mksR_TDS-0PEcHKHTRFyVznF7gobrBQBS0zKxJJF4w3q8iAg8omdDIZTauQZEvybVryIro1Ta__Z4zx3vTkB0fmUIS_ziWooSwmUaby0XDNl3bNH8ytlM4HTdHznNPzrXRXS_NqOzc5YdQId2RMDS143N9ENIAaJswjpbZHT2n6TgU-21VtlUdjMq73_eTIh-9W7Yx-xsjv6sA7BY");'>
               
-              <div class="w-full z-10">
+              <!-- Countdown, centered at the top -->
+              <div class="w-full z-10 text-center mb-4 sm:mb-6">
                 <h2 id="countdown" class="text-3xl sm:text-4xl font-bold tracking-tight text-shadow-sm"></h2> 
               </div>
 
-              <div id="hero-memo-section" class="w-full max-w-lg bg-black bg-opacity-50 backdrop-blur-md p-3 sm:p-4 rounded-lg shadow-xl z-10">
-                <h3 class="text-md sm:text-lg font-semibold mb-2 text-gray-100">我的備忘錄</h3>
-                <div class="flex flex-col sm:flex-row gap-2 mb-3">
-                  <input type="text" id="memo-input" class="flex-grow p-2 border border-gray-600 bg-gray-700 bg-opacity-60 rounded-md text-sm text-gray-50 focus:ring-blue-400 focus:border-blue-400 placeholder-gray-300" placeholder="新增備忘...">
-                  <button id="add-memo-button" class="hero-button-secondary px-3 py-2 sm:px-4 text-sm whitespace-nowrap"> 
-                    <i class="fas fa-plus mr-1 sm:mr-2"></i>新增
-                  </button>
-                </div>
-                <div id="memo-list-container" class="max-h-28 sm:max-h-32 overflow-y-auto space-y-1.5 sm:space-y-2 pr-1 sm:pr-2">
-                  <!-- Memos will be dynamically added here -->
-                </div>
-              </div>
-              
+              <!-- Flex container for Memo (left) and Slideshow (right) -->
+              <div class="flex flex-col md:flex-row gap-4 sm:gap-6 items-stretch flex-grow">
 
+                <!-- Left: Memo Section (變大) -->
+                <div id="hero-memo-section" class="md:w-7/12 lg:w-3/5 bg-black bg-opacity-60 backdrop-blur-md p-3 sm:p-4 rounded-lg shadow-xl z-10 flex flex-col text-left">
+                  <h3 class="text-md sm:text-lg font-semibold mb-2 text-gray-100">我的備忘錄</h3>
+                  <div class="flex flex-col sm:flex-row gap-2 mb-3">
+                    <input type="text" id="memo-input" class="flex-grow p-2 border border-gray-600 bg-gray-700 bg-opacity-60 rounded-md text-sm text-gray-50 focus:ring-blue-400 focus:border-blue-400 placeholder-gray-300" placeholder="新增備忘...">
+                    <button id="add-memo-button" class="hero-button-secondary px-3 py-2 sm:px-4 text-sm whitespace-nowrap"> 
+                      <i class="fas fa-plus mr-1 sm:mr-2"></i>新增
+                    </button>
+                  </div>
+                  <div id="memo-list-container" class="flex-grow max-h-28 sm:max-h-32 overflow-y-auto space-y-1.5 sm:space-y-2 pr-1 sm:pr-2">
+                    <!-- Memos will be dynamically added here -->
+                  </div>
+                </div>
+                
+                <!-- Right: Slideshow Section (變小) -->
+                <div id="slideshow-container" class="md:w-5/12 lg:w-2/5 flex-grow rounded-lg overflow-hidden shadow-xl z-10 relative bg-black bg-opacity-20">
+                  <img id="slideshow-image" src="read.png" alt="Slideshow" class="absolute inset-0 w-full h-full object-contain opacity-100">
+                </div>
+
+              </div>
             </div>
+            <!-- End of Hero Section -->
+
 
             <h2 id="explore-section-title" class="text-xl font-bold mt-8 mb-3">選擇你的區域</h2>
               <div class="grid grid-cols-2 md:grid-cols-5 gap-4"> 
@@ -386,6 +401,32 @@
         let activeZoneId = null; 
         let memos = [];
 
+        // --- Slideshow Functionality ---
+        const slideshowContainer = document.getElementById('slideshow-container');
+        if (slideshowContainer) {
+            const slideshowImageElement = document.getElementById('slideshow-image');
+            // 使用您提供的圖片檔案名稱
+            const slideshowImages = ['dog1.png', 'dog2.png', 'dog3.png', 'dog4.png', 'dog5.png', 'dog6.png']; 
+            let currentImageIndex = 0;
+
+            if (slideshowImageElement && slideshowImages.length > 0) {
+                slideshowImageElement.src = slideshowImages[0]; // 設定初始圖片
+
+                function changeSlide() {
+                    slideshowImageElement.style.opacity = 0; // 開始淡出
+
+                    setTimeout(() => {
+                        currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
+                        slideshowImageElement.src = slideshowImages[currentImageIndex];
+                        slideshowImageElement.style.opacity = 1; // 開始淡入
+                    }, 700); // 淡出動畫時間 (應與 CSS transition duration 相同)
+                }
+                // 每5秒更換一次圖片 (5000毫秒)
+                setInterval(changeSlide, 5000); 
+            }
+        }
+
+
         // --- Countdown Function ---
         function updateCountdown() {
           if (!countdownElement) return;
@@ -394,7 +435,6 @@
           const diffTime = targetDate - today;
           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-          // Clear previous content and classes (important if text changes drastically)
           countdownElement.innerHTML = ''; 
           countdownElement.classList.remove('text-green-300', 'text-yellow-300', 'text-red-300');
 
