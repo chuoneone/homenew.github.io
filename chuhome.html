@@ -72,12 +72,10 @@
     <div class="relative flex min-h-screen flex-col bg-white group/design-root overflow-x-hidden">
       <div class="layout-container flex grow flex-col">
         <header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-b-[#f0f2f5] bg-white/80 px-4 sm:px-10 py-3 backdrop-blur-md">
-          <div class="flex items-center gap-4 text-[#111418]">
-            <div class="size-4">
-              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path></svg>
-            </div>
-            <h2 class="text-lg font-bold">CHU PEI YI</h2>
-          </div>
+    <div class="flex items-center gap-4 text-[#111418]">
+      <img src="read.png" alt="Read Logo" class="h-5 w-5"> <!-- 您可以調整 h-5 w-5 來改變 logo 大小 -->
+      <h2 class="text-lg font-bold">CHU PEI YI</h2>
+    </div>
 
           <div class="md:hidden">
             <button id="hamburger-button" class="text-gray-700 hover:text-blue-600 focus:outline-none">
@@ -123,28 +121,28 @@
             </div>
 
             <h2 id="explore-section-title" class="text-xl font-bold mt-8 mb-3">選擇你的區域</h2>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4"> 
-              <div class="zone-card text-center cursor-pointer group" data-zone="zone-ai">
-                <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf248VM36QyPrj4ChTENi15n8c1lWENeGrUr9K02R4Kw37gklrCm2BeZRUdWpWgzZ8Q-MFX1XbQwKU5mt8mpJXPNQ9W4BR8-ilTpLcOH0hIO2LHhFEW7hruCiSo5mwSrYu4BshjhxlX4145wZzhpAkmO_sFYqBT8zqchVZIIXKZXC2mpU5aqvyv3U7nwD_-4arYUUd5SHoWkBHbGfmb643y4Yo1cwaprpK91L6me2SXiZiXeVu9-tMV4msbcBXuGga1ApvGmEAKocM");'></div>
-                <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">AI 區</p>
+              <div class="grid grid-cols-2 md:grid-cols-5 gap-4"> 
+                <div class="zone-card text-center cursor-pointer group" data-zone="zone-ai">
+                  <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf248VM36QyPrj4ChTENi15n8c1lWENeGrUr9K02R4Kw37gklrCm2BeZRUdWpWgzZ8Q-MFX1XbQwKU5mt8mpJXPNQ9W4BR8-ilTpLcOH0hIO2LHhFEW7hruCiSo5mwSrYu4BshjhxlX4145wZzhpAkmO_sFYqBT8zqchVZIIXKZXC2mpU5aqvyv3U7nwD_-4arYUUd5SHoWkBHbGfmb643y4Yo1cwaprpK91L6me2SXiZiXeVu9-tMV4msbcBXuGga1ApvGmEAKocM");'></div>
+                  <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">AI 區</p>
+                </div>
+                <div class="zone-card text-center cursor-pointer group" data-zone="zone-relax">
+                  <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYDJnmV-mTIYMgVe0BDK1p1WNrUcyE5qc6Ci1DUGC3IykmInRiU4Nca-R6z5cASWAOpGg1AUl3A6uMisY9vLR9EW5YBRdzr1dX-7xK5_8WlGBau3K-a5hVX-oX9UqwEw3-NX8LTe-RgaE8EA23-q50c-K4Y2iTapZ97dHeKjw7R3zvMmVbkJDXA51rLscTs1VJ4h35ZCdyT1GfIqaKeSjlT3AedPtVE8OlrkGS14HHfuvWoidqQl4wUN0doOz_vA8hJHhCz-u5EDVL");'></div>
+                  <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">放鬆區</p>
+                </div>
+                <div class="zone-card text-center cursor-pointer group" data-zone="zone-tools">
+                  <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjOFh3GDvcyMWCXARY4PFjxZ6gUYdQ7IY79BeMeqIVtnsgyK3HmeRDDWQ3OpoMHJdWzXyjzrRfy6PjWfKatJVou2x8P83XgKWeJ6_dHTQ3FZrUj85kn00gvscx6y_iv7OjVpKJ2vOg7uXgJUTLNbzlUKCVRVZTVS1tVS9TaNsmR6VQCeK1A7_K6vCsr5OSTOIxUyTz_kzcfKTv57Ri96GGA-6eVa5AvcleQFS4gKaO_GWMq4_khLmBL6hM1sS3JIQPP2dfD0EpMiF3");'></div>
+                  <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">工具區</p>
+                </div>
+                <div class="zone-card text-center cursor-pointer group" data-zone="zone-teach">
+                  <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL4tODmuFQhmwlyANmpYzx1DiXvV-tJwbYim_JlLsLxT_bzzOLdkaEf4RWVSQV_x5n7chQFGY9HScJKdk0NM4jNagLHveR8zTBNVb_l7HSI-_g5VT6aMBh1jLh-cxIewCLQS61QzD80JDyrwzOQQYkZDle0pUQ4lXddyeyYvBmYVwYpAiEPdSWYrMlFJkSsjpElpy9m_lio6-w6RGDf-GDaejH0lDt-f85jEkaTyZjwJNtxDukVxYPipJi0_8Ysskyp3fwDgbV2AkR");'></div>
+                  <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">教學區</p>
+                </div>
+                <div class="zone-card text-center cursor-pointer group" data-zone="zone-admin">
+                  <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZi7jCwJCkp3UOfhdZ3JGC1uUavCk0fQHYLm_kfY7D9EB8vWNfcvBin_G8wy1cjdn2tf51Leu4jxivD64PjKsr_LFBvhsmuH2eQfMByEOsWzWiJRjYS0rm1G4AtKPU6LK6MuBC7o1BbIF4xOWp0EZwg2sv88oBYhIK44L4pHpg2cFtdiX32K9MmiIn_anp4y4UzrWEtmJ1Lod_qIuXAjVnue-dgQMiUZW3C7AYfbzwUUVX9V7jCqWxyZVx7TB0cAm75xixPyeKcdtY");'></div>
+                  <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">行政區</p>
+                </div>
               </div>
-              <div class="zone-card text-center cursor-pointer group" data-zone="zone-relax">
-                <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYDJnmV-mTIYMgVe0BDK1p1WNrUcyE5qc6Ci1DUGC3IykmInRiU4Nca-R6z5cASWAOpGg1AUl3A6uMisY9vLR9EW5YBRdzr1dX-7xK5_8WlGBau3K-a5hVX-oX9UqwEw3-NX8LTe-RgaE8EA23-q50c-K4Y2iTapZ97dHeKjw7R3zvMmVbkJDXA51rLscTs1VJ4h35ZCdyT1GfIqaKeSjlT3AedPtVE8OlrkGS14HHfuvWoidqQl4wUN0doOz_vA8hJHhCz-u5EDVL");'></div>
-                <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">放鬆區</p>
-              </div>
-              <div class="zone-card text-center cursor-pointer group" data-zone="zone-tools">
-                <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjOFh3GDvcyMWCXARY4PFjxZ6gUYdQ7IY79BeMeqIVtnsgyK3HmeRDDWQ3OpoMHJdWzXyjzrRfy6PjWfKatJVou2x8P83XgKWeJ6_dHTQ3FZrUj85kn00gvscx6y_iv7OjVpKJ2vOg7uXgJUTLNbzlUKCVRVZTVS1tVS9TaNsmR6VQCeK1A7_K6vCsr5OSTOIxUyTz_kzcfKTv57Ri96GGA-6eVa5AvcleQFS4gKaO_GWMq4_khLmBL6hM1sS3JIQPP2dfD0EpMiF3");'></div>
-                <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">工具區</p>
-              </div>
-              <div class="zone-card text-center cursor-pointer group" data-zone="zone-teach">
-                <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL4tODmuFQhmwlyANmpYzx1DiXvV-tJwbYim_JlLsLxT_bzzOLdkaEf4RWVSQV_x5n7chQFGY9HScJKdk0NM4jNagLHveR8zTBNVb_l7HSI-_g5VT6aMBh1jLh-cxIewCLQS61QzD80JDyrwzOQQYkZDle0pUQ4lXddyeyYvBmYVwYpAiEPdSWYrMlFJkSsjpElpy9m_lio6-w6RGDf-GDaejH0lDt-f85jEkaTyZjwJNtxDukVxYPipJi0_8Ysskyp3fwDgbV2AkR");'></div>
-                <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">教學區</p>
-              </div>
-              <div class="zone-card text-center cursor-pointer group" data-zone="zone-admin">
-                <div class="aspect-square bg-cover bg-center rounded-lg group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZi7jCwJCkp3UOfhdZ3JGC1uUavCk0fQHYLm_kfY7D9EB8vWNfcvBin_G8wy1cjdn2tf51Leu4jxivD64PjKsr_LFBvhsmuH2eQfMByEOsWzWiJRjYS0rm1G4AtKPU6LK6MuBC7o1BbIF4xOWp0EZwg2sv88oBYhIK44L4pHpg2cFtdiX32K9MmiIn_anp4y4UzrWEtmJ1Lod_qIuXAjVnue-dgQMiUZW3C7AYfbzwUUVX9V7jCqWxyZVx7TB0cAm75xixPyeKcdtY");'></div>
-                <p class="mt-2 font-medium group-hover:text-blue-600 transition-colors">行政區</p>
-              </div>
-            </div>
 
             <!-- 主內容區塊 (所有區塊預設都是 hidden) -->
             <div class="mt-8 space-y-6">
@@ -155,10 +153,18 @@
                     <h4 class="text-center text-base font-bold mb-3">🤖 AI 工具</h4>
                     <div class="flex flex-col gap-2">
                       <a href="https://chat.openai.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">ChatGPT</a>
-                      <a href="https://makersuite.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Google AI Studio</a>
                       <a href="https://claude.ai/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Claude</a>
+                      <!-- 移除了 Google AI Studio, Notebook LM, Gemini -->
+                    </div>
+                  </div>
+                  <!-- 新增的 Google AI 類別 -->
+                  <div class="p-4 border rounded-lg shadow bg-white">
+                    <h4 class="text-center text-base font-bold mb-3">🚀 Google AI</h4>
+                    <div class="flex flex-col gap-2">
+                      <a href="https://makersuite.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Google AI Studio</a>
                       <a href="https://notebooklm.google/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Notebook LM</a>
                       <a href="https://gemini.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Gemini</a>
+                      <a href="https://stitch.withgoogle.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Stitch</a>                    
                     </div>
                   </div>
                 </div>
@@ -170,10 +176,35 @@
                   <div class="p-4 border rounded-lg shadow bg-white">
                     <h4 class="text-center text-base font-bold mb-3">🎈 社群平台</h4>
                     <div class="flex flex-col gap-2">
-                      <a href="https://www.facebook.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Facebook</a>
-                      <a href="https://www.instagram.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Instagram</a>
-                      <a href="https://www.threads.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Threads</a>
-                      <a href="https://www.youtube.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">YouTube</a>
+                      <a href="https://www.facebook.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                        <i class="fab fa-facebook mr-2"></i>Facebook
+                      </a>
+                      <a href="https://www.instagram.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                        <i class="fab fa-instagram mr-2"></i>Instagram
+                      </a>
+                      <a href="https://www.threads.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                        <i class="fas fa-at mr-2"></i>Threads
+                      </a>
+                    </div>
+                  </div>
+                  <div class="p-4 border rounded-lg shadow bg-white">
+                    <h4 class="text-center text-base font-bold mb-3">🎬 影片區</h4>
+                    <div class="flex flex-col gap-2">
+                      <a href="https://www.youtube.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                        <i class="fab fa-youtube mr-2"></i> YouTube
+                      </a>
+                      <a href="https://94580.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                        <i class="fas fa-film mr-2"></i> 94580
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="p-4 border rounded-lg shadow bg-white">
+                    <h4 class="text-center text-base font-bold mb-3">🛍️ 購物</h4>
+                    <div class="flex flex-col gap-2">
+                      <a href="https://www.momoshop.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">momo購物網</a>
+                      <a href="https://shopee.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">蝦皮購物</a>
+                      <a href="https://24h.pchome.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">PChome 24h購物</a>
                     </div>
                   </div>
                 </div>
@@ -219,52 +250,78 @@
                 </div>
               </div>
               
-              <div id="zone-teach" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">教學資源</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📁 書商資源</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林</a>
-                      <a href="https://onebox2.oneclass.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">南一</a>
-                      <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林Wordwall</a>
-                      <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒Wordwall</a>
-                      <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林數位學習平台</a>
-                      <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林期刊大師</a>
-                    </div>
-                  </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🛠️ 常用工具</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://soundoftext.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">文字轉語音</a>
-                      <a href="https://login.microsoftonline.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Office365</a>
-                      <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林Wordwall</a>
-                      <a href="https://www.canva.com/zh_tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Canva</a>
-                      <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">計時</a>
-                    </div>
-                  </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🎮 互動軟體</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Wordwall</a>
-                      <a href="https://quizizz.com/admin" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Quizizz</a>
-                      <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Blooket</a>
-                      <a href="https://www.gimkit.com/me" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Gimkit</a>
-                      <a href="https://create.kahoot.it/auth/login" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Kahoot</a>
-                    </div>
-                  </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🧮 數學相關</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">子由數學</a>
-                      <a href="https://subjects.modernedu.hk/mce/apps/maths/www.mceducation.com.hk/apps/maths/index_ce.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">數學app</a>
-                      <a href="https://polypad.amplify.com/p" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">mathigon</a>
-                      <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒互動遊戲區</a>
-                      <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">繪圖計算機</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+<div id="zone-teach" class="zone-content hidden">
+  <h3 class="text-lg font-bold mb-6">教學資源</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="p-4 border rounded-lg shadow bg-white">
+      <h4 class="text-center text-base font-bold mb-3">📁 書商資源</h4>
+      <div class="flex flex-col gap-2">
+        <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林</a>
+        <a href="https://onebox2.oneclass.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">南一</a>
+        <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林Wordwall</a>
+        <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒Wordwall</a>
+        <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林數位學習平台</a>
+        <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林期刊大師</a>
+      </div>
+    </div>
+    <div class="p-4 border rounded-lg shadow bg-white">
+      <h4 class="text-center text-base font-bold mb-3">🛠️ 常用工具</h4>
+      <div class="flex flex-col gap-2">
+        <a href="https://soundoftext.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">文字轉語音</a>
+        <a href="https://login.microsoftonline.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Office365</a>
+        <a href="https://www.canva.com/zh_tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Canva</a>
+        <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">計時</a>
+      </div>
+    </div>
+    <div class="p-4 border rounded-lg shadow bg-white">
+      <h4 class="text-center text-base font-bold mb-3">🎮 互動軟體</h4>
+      <div class="flex flex-col gap-2">
+        <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Wordwall</a>
+        <a href="https://quizizz.com/admin" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Quizizz</a>
+        <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Blooket</a>
+        <a href="https://www.gimkit.com/me" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Gimkit</a>
+        <a href="https://create.kahoot.it/auth/login" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Kahoot</a>
+      </div>
+    </div>
+    <div class="p-4 border rounded-lg shadow bg-white">
+      <h4 class="text-center text-base font-bold mb-3">🌟 上課用</h4>
+      <div class="flex flex-col gap-2">
+        <a href="https://aaclearningbackend.azurewebsites.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">AAC</a>
+        <a href="https://www.learnmode.net/home/teach_courses" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">學習吧</a>
+        <a href="https://teach.classdojo.com/#/login?redirect=%2Fclasses%2F6265f96593f3ace4537b5a94%2Fpoints" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">ClassDojo</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增的一排卡片 -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+    <div class="p-4 border rounded-lg shadow bg-white">
+      <h4 class="text-center text-base font-bold mb-3">🧮 數學相關</h4>
+      <div class="flex flex-col gap-2">
+        <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">子由數學</a>
+        <a href="https://subjects.modernedu.hk/mce/apps/maths/www.mceducation.com.hk/apps/maths/index_ce.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">數學app</a>
+        <a href="https://polypad.amplify.com/p" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">mathigon</a>
+        <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒互動遊戲區</a>
+        <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">繪圖計算機</a>
+      </div>
+    </div>
+  <div class="p-4 border rounded-lg shadow bg-white">
+    <h4 class="text-center text-base font-bold mb-3">📝 國文相關</h4>
+    <div class="flex flex-col gap-2">
+      <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">雄筆順</a>
+      <a href="https://digitalmaster.knsh.com.tw/ju/chinese/matchgame/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">語文常識配對</a>
+    </div>
+  </div>
+  <div class="p-4 border rounded-lg shadow bg-white">
+    <h4 class="text-center text-base font-bold mb-3">💡 引起動機</h4>
+    <div class="flex flex-col gap-2">
+      <a href="https://digitalmaster.knsh.com.tw/ju/math/wake-up/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">腦力活化</a>
+      <a href="https://toytheater.com/category/play/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Toy Theater</a>
+    </div>
+  </div>
+
+</div>
+</div>
 
               <div id="zone-admin" class="zone-content hidden">
                 <h3 class="text-lg font-bold mb-6">行政資源</h3>
