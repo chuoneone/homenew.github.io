@@ -505,7 +505,7 @@
         // --- Countdown Function ---
         function updateCountdown() {
           if (!countdownElement) return;
-          const targetDate = new Date('2025-07-01');
+          const targetDate = new Date('2026-01-24');
           const today = new Date();
           const diffTime = targetDate - today;
           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -515,15 +515,15 @@
 
 
           if (diffDays > 7) {
-            countdownElement.innerHTML = `暑假還有 <span class="font-black text-outline-black">${diffDays}</span> 天`;
+            countdownElement.innerHTML = `寒假還有 <span class="font-black text-outline-black">${diffDays}</span> 天`;
 
           } else if (diffDays > 0) {
-            countdownElement.innerHTML = `暑假倒數 <span class="font-black text-red-400 animate-pulse">${diffDays}</span> 天！`;
+            countdownElement.innerHTML = `寒假倒數 <span class="font-black text-red-400 animate-pulse">${diffDays}</span> 天！`;
           } else if (diffDays === 0) {
-              countdownElement.innerHTML = `<span class="font-black text-green-300 animate-bounce">暑假就是今天！🎉</span>`;
+              countdownElement.innerHTML = `<span class="font-black text-green-300 animate-bounce">寒假就是今天！🎉</span>`;
           } else {
             const daysPast = Math.abs(diffDays);
-            countdownElement.innerHTML = `暑假已過 <span class="font-black text-sky-300">${daysPast}</span> 天`;
+            countdownElement.innerHTML = `寒假已過 <span class="font-black text-sky-300">${daysPast}</span> 天`;
           }
         }
 
@@ -706,4 +706,5 @@
       });
     </script>
   </body>
+
 </html>
