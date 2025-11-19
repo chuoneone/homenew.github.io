@@ -80,6 +80,7 @@
             border: 2px solid #f0f0f0;
             border-radius: 1rem;
             transition: all 0.3s ease;
+            height: 100%;
         }
         .resource-card:hover {
             border-color: #1D1D1D;
@@ -88,13 +89,17 @@
         }
         .card-link {
             display: block;
-            padding: 12px 15px;
+            padding: 10px 12px;
             background-color: #f9f9f9;
             border-radius: 8px;
             font-weight: 700;
+            font-size: 0.95rem;
             transition: all 0.2s;
             border: 1px solid transparent;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .card-link:hover {
             background-color: #1D1D1D;
@@ -125,7 +130,7 @@
             border-radius: 1rem;
             box-shadow: 6px 6px 0px 0px #FDC43F;
             overflow: hidden;
-            height: 100%; /* 確保等高 */
+            height: 100%; 
         }
         
         /* 備忘錄項目樣式 */
@@ -218,7 +223,7 @@
                             開始探索
                         </button>
                         
-                        <!-- AI 快速連結按鈕 (取代圓圈) -->
+                        <!-- AI 快速連結按鈕 -->
                         <div class="flex items-center gap-3 mt-4 sm:mt-0">
                             <a href="https://chat.openai.com/" target="_blank" class="flex items-center gap-2 px-4 py-3 bg-white border-2 border-wedu-black rounded-lg font-bold hover:bg-gray-50 transition-transform hover:-translate-y-1 shadow-brutal-sm text-sm text-wedu-black">
                                 <i class="fas fa-robot text-teal-600 text-lg"></i> ChatGPT
@@ -234,7 +239,7 @@
                             <div class="bg-wedu-black text-white p-2 rounded-md"><i class="fas fa-bolt"></i></div>
                             <div class="flex flex-col">
                                 <span class="text-sm font-bold text-wedu-black">高效</span>
-                                <span class="text-[10px] text-gray-500">快速工具</span>
+                                <span class="text-[10px] text-gray-500">快速連結</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -247,9 +252,8 @@
                     </div>
                 </div>
 
-                <!-- 右側功能區塊 (僅保留備忘錄) -->
+                <!-- 右側功能區塊 (備忘錄) -->
                 <div class="relative z-10 w-full">
-                    
                     <!-- 備忘錄卡片 -->
                     <div class="hero-card bg-white p-5 min-h-[320px] flex flex-col relative">
                         <!-- 標題列 -->
@@ -283,7 +287,6 @@
                         <!-- 裝飾釘子 -->
                         <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-wedu-red border-2 border-wedu-black z-20"></div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -306,6 +309,7 @@
                             <a href="https://chat.openai.com/" target="_blank" class="card-link">ChatGPT</a>
                             <a href="https://claude.ai/" target="_blank" class="card-link">Claude</a>
                             <a href="https://www.perplexity.ai/" target="_blank" class="card-link">Perplexity</a>
+                            <a href="https://makersuite.google.com/" target="_blank" class="card-link">Google AI Studio</a>
                         </div>
                     </div>
                     <div class="resource-card p-6">
@@ -313,7 +317,7 @@
                         <div class="space-y-2">
                             <a href="https://gemini.google.com/" target="_blank" class="card-link">Gemini</a>
                             <a href="https://notebooklm.google/" target="_blank" class="card-link">Notebook LM</a>
-                            <a href="https://makersuite.google.com/" target="_blank" class="card-link">AI Studio</a>
+                            <a href="https://stitch.withgoogle.com/" target="_blank" class="card-link">Stitch</a>
                         </div>
                     </div>
                     <div class="resource-card p-6">
@@ -350,15 +354,15 @@
                         <h4 class="font-bold text-lg mb-4">影音娛樂</h4>
                         <div class="space-y-2">
                             <a href="https://www.youtube.com/" target="_blank" class="card-link"><i class="fab fa-youtube text-red-600 mr-2"></i>YouTube</a>
-                            <a href="https://94580.net/" target="_blank" class="card-link">94580</a>
+                            <a href="https://94580.net/" target="_blank" class="card-link"><i class="fas fa-video mr-2"></i>94580</a>
                         </div>
                     </div>
                     <div class="resource-card p-6">
                         <h4 class="font-bold text-lg mb-4">線上購物</h4>
                         <div class="space-y-2">
-                            <a href="https://shopee.tw/" target="_blank" class="card-link">蝦皮購物</a>
-                            <a href="https://www.momoshop.com.tw/" target="_blank" class="card-link">Momo購物</a>
-                            <a href="https://24h.pchome.com.tw/" target="_blank" class="card-link">PChome 24h</a>
+                            <a href="https://shopee.tw/" target="_blank" class="card-link"><i class="fas fa-shopping-bag mr-2 text-orange-500"></i>蝦皮購物</a>
+                            <a href="https://www.momoshop.com.tw/" target="_blank" class="card-link"><i class="fas fa-shopping-cart mr-2 text-pink-500"></i>Momo購物</a>
+                            <a href="https://24h.pchome.com.tw/" target="_blank" class="card-link"><i class="fas fa-box-open mr-2 text-blue-500"></i>PChome 24h</a>
                         </div>
                     </div>
                 </div>
@@ -377,28 +381,45 @@
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <!-- 數位與文書 -->
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">雲端工具</h4>
+                        <h4 class="font-bold text-lg mb-4">雲端與日常</h4>
                         <div class="space-y-2">
-                            <a href="https://drive.google.com/" target="_blank" class="card-link">Google Drive</a>
-                            <a href="https://www.notion.so/" target="_blank" class="card-link">Notion</a>
-                            <a href="https://keep.google.com/" target="_blank" class="card-link">Keep</a>
+                            <a href="https://drive.google.com/" target="_blank" class="card-link"><i class="fab fa-google-drive mr-2 text-green-600"></i>Google 雲端</a>
+                            <a href="https://www.notion.so/" target="_blank" class="card-link"><i class="fas fa-sticky-note mr-2"></i>Notion</a>
+                            <a href="https://keep.google.com/" target="_blank" class="card-link"><i class="far fa-lightbulb mr-2 text-yellow-500"></i>Keep</a>
+                            <a href="https://calendar.google.com/" target="_blank" class="card-link"><i class="far fa-calendar-alt mr-2 text-blue-500"></i>Google 日曆</a>
+                            <a href="https://mail.google.com/" target="_blank" class="card-link"><i class="far fa-envelope mr-2 text-red-500"></i>Gmail</a>
+                            <a href="https://translate.google.com/" target="_blank" class="card-link"><i class="fas fa-language mr-2 text-blue-600"></i>Google 翻譯</a>
+                            <a href="https://github.com/chuoneone" target="_blank" class="card-link"><i class="fab fa-github mr-2"></i>GitHub</a>
                         </div>
                     </div>
+
+                    <!-- 文書與設計 -->
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">日常服務</h4>
+                        <h4 class="font-bold text-lg mb-4">Office 與設計</h4>
                         <div class="space-y-2">
-                            <a href="https://calendar.google.com/" target="_blank" class="card-link">Google 日曆</a>
-                            <a href="https://mail.google.com/" target="_blank" class="card-link">Gmail</a>
-                            <a href="https://translate.google.com/" target="_blank" class="card-link">Google 翻譯</a>
+                            <a href="https://docs.google.com/" target="_blank" class="card-link"><i class="fas fa-file-alt mr-2 text-blue-500"></i>Google 文件</a>
+                            <a href="https://slides.google.com/" target="_blank" class="card-link"><i class="fas fa-presentation mr-2 text-yellow-500"></i>Google 簡報</a>
+                            <a href="https://sheets.google.com/" target="_blank" class="card-link"><i class="fas fa-table mr-2 text-green-500"></i>Google 試算表</a>
+                            <a href="https://forms.google.com/" target="_blank" class="card-link"><i class="fas fa-poll-h mr-2 text-purple-500"></i>Google 表單</a>
+                            <a href="https://login.microsoftonline.com/" target="_blank" class="card-link"><i class="fab fa-microsoft mr-2 text-orange-600"></i>Office 365</a>
+                            <a href="https://www.canva.com/zh_tw/" target="_blank" class="card-link"><i class="fas fa-palette mr-2 text-teal-500"></i>Canva</a>
                         </div>
                     </div>
+
+                    <!-- 教室輔助 -->
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">文書處理</h4>
+                        <h4 class="font-bold text-lg mb-4">教室互動工具</h4>
                         <div class="space-y-2">
-                            <a href="https://docs.google.com/" target="_blank" class="card-link">Google 文件</a>
-                            <a href="https://slides.google.com/" target="_blank" class="card-link">Google 簡報</a>
-                            <a href="https://sheets.google.com/" target="_blank" class="card-link">Google 試算表</a>
+                            <a href="https://classroom.google.com/" target="_blank" class="card-link"><i class="fas fa-chalkboard-teacher mr-2 text-green-600"></i>Classroom</a>
+                            <a href="https://soundoftext.com/" target="_blank" class="card-link"><i class="fas fa-volume-up mr-2"></i>文字轉語音</a>
+                            <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="card-link"><i class="far fa-clock mr-2"></i>線上計時器</a>
+                            <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="card-link">Wordwall</a>
+                            <a href="https://quizizz.com/admin" target="_blank" class="card-link">Quizizz</a>
+                            <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="card-link">Blooket</a>
+                            <a href="https://www.gimkit.com/me" target="_blank" class="card-link">Gimkit</a>
+                            <a href="https://create.kahoot.it/auth/login" target="_blank" class="card-link">Kahoot</a>
                         </div>
                     </div>
                 </div>
@@ -417,34 +438,54 @@
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <!-- 書商資源 -->
                     <div class="resource-card p-6">
                         <h4 class="font-bold text-lg mb-4">書商資源</h4>
                         <div class="space-y-2">
-                            <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html" target="_blank" class="card-link">翰林電子書</a>
+                            <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="card-link">翰林電子書</a>
                             <a href="https://nanibox3.oneclass.com.tw/resource" target="_blank" class="card-link">南一資源</a>
-                            <a href="https://digitalmaster.knsh.com.tw/" target="_blank" class="card-link">康軒資源</a>
+                            <a href="https://digitalmaster.knsh.com.tw/v3/pages/j/index.html" target="_blank" class="card-link">康軒電子書</a>
+                            <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="card-link">翰林數位平台</a>
+                            <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="card-link">翰林期刊大師</a>
                         </div>
                     </div>
+
+                    <!-- 學科輔助 -->
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">互動軟體</h4>
-                        <div class="space-y-2">
-                            <a href="https://wordwall.net/" target="_blank" class="card-link">Wordwall</a>
-                            <a href="https://quizizz.com/" target="_blank" class="card-link">Quizizz</a>
-                            <a href="https://create.kahoot.it/" target="_blank" class="card-link">Kahoot</a>
-                        </div>
-                    </div>
-                    <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">學科輔助</h4>
+                        <h4 class="font-bold text-lg mb-4">學科輔助 (數/國)</h4>
                         <div class="space-y-2">
                             <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="card-link">子由數學</a>
+                            <a href="https://subjects.modernedu.hk/" target="_blank" class="card-link">數學 App</a>
+                            <a href="https://polypad.amplify.com/p" target="_blank" class="card-link">Mathigon</a>
+                            <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="card-link">康軒互動遊戲</a>
+                            <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="card-link">繪圖計算機</a>
                             <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="card-link">雄筆順</a>
+                            <a href="https://digitalmaster.knsh.com.tw/ju/chinese/matchgame/" target="_blank" class="card-link">語文常識配對</a>
                         </div>
                     </div>
+
+                    <!-- 線上學習 -->
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">線上學習與管理</h4>
+                        <div class="space-y-2">
+                            <a href="https://aaclearningbackend.azurewebsites.net/" target="_blank" class="card-link">AAC</a>
+                            <a href="https://www.learnmode.net/home/teach_courses" target="_blank" class="card-link">學習吧</a>
+                            <a href="https://teach.classdojo.com/" target="_blank" class="card-link">ClassDojo</a>
+                            <a href="https://sites.google.com/view/specialchu/home" target="_blank" class="card-link">線上學習區</a>
+                            <a href="https://digitalmaster.knsh.com.tw/ju/math/wake-up/" target="_blank" class="card-link">腦力活化</a>
+                            <a href="https://toytheater.com/category/play/" target="_blank" class="card-link">Toy Theater</a>
+                        </div>
+                    </div>
+
+                    <!-- 出題系統 -->
                     <div class="resource-card p-6">
                         <h4 class="font-bold text-lg mb-4">出題系統</h4>
                         <div class="space-y-2">
-                            <a href="https://nanipaper.oneclass.com.tw/" target="_blank" class="card-link">南一出題</a>
+                            <a href="https://nanipaper.oneclass.com.tw/login" target="_blank" class="card-link">南一出題</a>
+                            <a href="https://quiz.knsh.com.tw/" target="_blank" class="card-link">康軒出題</a>
                             <a href="https://testbank.hle.com.tw/" target="_blank" class="card-link">翰林出題</a>
+                            <a href="https://wordwall.net/teacher/393914/hanlindigi" target="_blank" class="card-link">翰林 Wordwall</a>
+                            <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="card-link">康軒 Wordwall</a>
                         </div>
                     </div>
                 </div>
@@ -466,22 +507,28 @@
                     <div class="resource-card p-6">
                         <h4 class="font-bold text-lg mb-4">行政系統</h4>
                         <div class="space-y-2">
-                            <a href="https://www.set.edu.tw/" target="_blank" class="card-link">特通網</a>
-                            <a href="https://srec.hlc.edu.tw/" target="_blank" class="card-link">特教資源網</a>
+                            <a href="https://www.set.edu.tw/default.asp" target="_blank" class="card-link">特通網</a>
+                            <a href="https://eschool.hlc.edu.tw/" target="_blank" class="card-link">全誼校務系統</a>
+                            <a href="https://news.hlc.edu.tw/index.php?cate_id=10&page=department" target="_blank" class="card-link">花蓮處務公告</a>
+                            <a href="https://srec.hlc.edu.tw/index.php" target="_blank" class="card-link">特教資源網</a>
                         </div>
                     </div>
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">研習進修</h4>
+                        <h4 class="font-bold text-lg mb-4">研習與表件</h4>
                         <div class="space-y-2">
-                            <a href="https://special.moe.gov.tw/" target="_blank" class="card-link">特教研習</a>
-                            <a href="https://www1.inservice.edu.tw/" target="_blank" class="card-link">全國研習</a>
+                            <a href="https://special.moe.gov.tw/#/menuLayout/register/study" target="_blank" class="card-link">特教研習</a>
+                            <a href="https://www1.inservice.edu.tw/index2-3.aspx" target="_blank" class="card-link">全國研習</a>
+                            <a href="https://drive.google.com/drive/folders/15F9f5dW6PHYode_w1opdEKLYkoNKmnMe" target="_blank" class="card-link">鑑定表單</a>
+                            <a href="http://spec.ntct.edu.tw/FileUploadCategoryListC003100.aspx" target="_blank" class="card-link">計分 Excel</a>
+                            <a href="https://sec.ntpc.edu.tw/p/406-1004-9160,r140.php" target="_blank" class="card-link">情緒處理表件</a>
                         </div>
                     </div>
                     <div class="resource-card p-6">
-                        <h4 class="font-bold text-lg mb-4">教材素材</h4>
+                        <h4 class="font-bold text-lg mb-4">素材圖庫</h4>
                         <div class="space-y-2">
-                            <a href="https://www.irasutoya.com/" target="_blank" class="card-link">Irasutoya</a>
-                            <a href="https://www.flaticon.com/" target="_blank" class="card-link">Flaticon</a>
+                            <a href="https://www.irasutoya.com/" target="_blank" class="card-link">Irasutoya (插圖)</a>
+                            <a href="https://www.flaticon.com/" target="_blank" class="card-link">Flaticon (圖示)</a>
+                            <a href="https://chojugiga.com/" target="_blank" class="card-link">鳥獸戲畫</a>
                         </div>
                     </div>
                 </div>
@@ -490,7 +537,7 @@
     </main>
 
     <!-- Footer (固定在最下方) -->
-    <footer class="bg-wedu-yellow py-4 mt-auto border-t-2 border-wedu-black">
+    <footer class="bg-wedu-yellow py-4 mt-auto border-t-2 border-wedu-black relative">
         <!-- 黃色波浪 SVG -->
         <div class="absolute top-0 left-0 w-full overflow-hidden leading-none transform -translate-y-full rotate-180" style="height: 40px;">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-full block fill-wedu-yellow">
@@ -499,7 +546,6 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
-
             <p class="text-wedu-black font-bold text-sm">
                 © 2025 Chu Pei Yi. All rights reserved.
             </p>
@@ -582,6 +628,7 @@
                 const countdownElement = document.getElementById('nav-countdown'); 
                 if (!countdownElement) return;
                 
+                // 設定寒假日期 (範例為 2026/1/24，可自行調整)
                 const targetDate = new Date('2026-01-24');
                 const today = new Date();
                 const diffTime = targetDate - today;
@@ -593,10 +640,10 @@
                 } else if (diffDays === 0) {
                     countdownText = `寒假就是今天！🎉`;
                 } else {
-                    countdownText = `寒假已過 ${Math.abs(diffDays)} 天`;
+                    // 如果過了日期，可以顯示已放假或準備下一個假期
+                    countdownText = `假期愉快！`;
                 }
-                // Update button content but keep icon
-                countdownElement.innerHTML = `<i class="fas fa-snowflake mr-2"></i> ${countdownText}`;
+                countdownElement.innerHTML = `<i class="fas fa-snowflake"></i> ${countdownText}`;
             }
             updateCountdown();
             setInterval(updateCountdown, 60000);
