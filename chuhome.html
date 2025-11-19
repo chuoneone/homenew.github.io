@@ -1,833 +1,667 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-  <head>
+<html lang="zh-TW">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-    <link
-      rel="stylesheet"
-      as="style"
-      onload="this.rel='stylesheet'"
-      href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Work+Sans:wght@400;500;700;900"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <title>CHU PEI YI</title>
+    <title>Chu Pei Yi's Toolbox</title>
     <link rel="icon" type="image/png" href="read.png" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <style>
-      body {
-        font-family: "Work Sans", "Noto Sans", sans-serif;
-        background-color: #f3f4f6; /* 稍微亮一點的灰背景 */
-        overflow-x: hidden; /* 防止滑入動畫導致水平捲軸 */
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-
-      /* --- 動畫定義 --- */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes scaleIn {
-        from {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      .animate-fade-in-up {
-        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-      
-      .animate-scale-in {
-        animation: scaleIn 0.5s ease-out forwards;
-      }
-
-      /* 延遲動畫類別，用於依序進場 */
-      .delay-100 { animation-delay: 100ms; }
-      .delay-200 { animation-delay: 200ms; }
-      .delay-300 { animation-delay: 300ms; }
-      .delay-400 { animation-delay: 400ms; }
-
-      .zone-content {
-        scroll-margin-top: 100px;
-      }
-      #explore-section-title {
-        scroll-margin-top: 100px;
-      }
-
-      /* 導覽列連結特效 */
-      .nav-link {
-        color: #4b5563;
-        font-weight: 500;
-        position: relative;
-        padding-bottom: 2px;
-      }
-      
-      .nav-link::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #78716c; /* Stone-500 */
-        transition: width 0.3s ease-in-out;
-      }
-
-      .nav-link:hover {
-        color: #1c1917; 
-      }
-      
-      .nav-link:hover::after {
-        width: 100%;
-      }
-
-      .nav-link.active {
-        color: #000 !important;
-        font-weight: 700 !important;
-      }
-      
-      .nav-link.active::after {
-        width: 100%;
-        background-color: #44403c;
-      }
-
-      /* 備忘錄捲軸優化 */
-      #memo-list-container::-webkit-scrollbar {
-        width: 6px;
-      }
-      #memo-list-container::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 3px;
-      }
-      #memo-list-container::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 3px;
-      }
-      #memo-list-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.4);
-      }
-
-      /* 按鈕特效 */
-      .hero-button-secondary {
-        background-color: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(4px);
-        border: 1px solid rgba(255,255,255,0.3);
-        color: #fff;
-        font-weight: 600;
-        border-radius: 0.375rem;
-        padding: 0.5rem 1rem;
-        transition: all 0.2s ease-in-out;
-      }
-      .hero-button-secondary:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
-
-      .btn {
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-      .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        background-color: #e5e7eb !important; /* gray-200 -> gray-300 hover logic replacement */
-      }
-      .btn:active {
-        transform: translateY(-1px);
-      }
-
-      .text-outline-black {
-        color: #ffffff;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-      }
-
-      .footer-morandi {
-        background-color: #a8a29e; /* Stone-400 */
-        color: white;
-        text-align: center;
-        padding: 1.5rem 0;
-        font-size: 0.875rem;
-        box-shadow: inner 0 2px 4px rgba(0,0,0,0.1);
-      }
-      
-      /* 卡片動態效果 */
-      .zone-card-bg {
-        transition: transform 0.5s ease;
-      }
-      .zone-card:hover .zone-card-bg {
-        transform: scale(1.1);
-      }
-      .zone-card-overlay {
-        transition: background-color 0.3s ease;
-      }
-
-      /* 備忘錄項目進場動畫 */
-      .memo-item-enter {
-        animation: fadeInUp 0.3s ease-out forwards;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="relative min-h-screen flex flex-col bg-stone-50 group/design-root overflow-hidden">
-      <div class="layout-container flex grow flex-col">
-        
-        <!-- Header -->
-        <header class="sticky top-0 z-50 flex items-center justify-between border-b border-stone-200/60 bg-stone-100/80 px-4 sm:px-10 py-3 backdrop-blur-md shadow-sm transition-all duration-300 animate-fade-in-up">
-          <div class="flex items-center gap-4 text-stone-700 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <div class="relative group">
-                <img src="read.png" alt="Read Logo" class="h-8 w-8 transition-transform duration-300 group-hover:rotate-12">
-                <div class="absolute -inset-2 bg-stone-400 rounded-full opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
-            </div>
-            <h2 class="text-xl font-bold tracking-wide text-stone-800">CHU PEI YI</h2>
-          </div>
-
-          <div class="md:hidden">
-            <button id="hamburger-button" class="text-stone-600 hover:text-stone-900 focus:outline-none p-2 rounded-md hover:bg-stone-200/50 transition-colors">
-              <svg class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-              </svg>
-            </button>
-          </div>
-
-          <nav id="mobile-menu" class="hidden md:flex md:items-center md:gap-8 absolute md:static top-[60px] left-0 w-full md:w-auto bg-stone-100/95 md:bg-transparent shadow-lg md:shadow-none py-4 md:py-0 px-4 md:px-0 border-b md:border-b-0 border-stone-200">
-            <a href="javascript:void(0);" data-zone="zone-ai" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">AI 區</a>
-            <a href="javascript:void(0);" data-zone="zone-relax" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">放鬆區</a>
-            <a href="javascript:void(0);" data-zone="zone-tools" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">工具區</a>
-            <a href="javascript:void(0);" data-zone="zone-teach" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">教學區</a>
-            <a href="javascript:void(0);" data-zone="zone-admin" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0">行政區</a>
-          </nav>
-        </header>
-
-        <div class="px-4 md:px-10 lg:px-40 py-8">
-          <div class="max-w-[1024px] mx-auto">
-            
-            <!-- Hero Section -->
-            <div class="animate-fade-in-up delay-100 min-h-[380px] sm:min-h-[420px] bg-cover bg-center bg-no-repeat rounded-2xl p-6 sm:p-8 text-white relative flex flex-col shadow-2xl overflow-hidden transform transition-all hover:shadow-stone-500/20"
-              style='background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAi0g2nGKg6VXLAAS1OjnmFqiQHAx1AA32Mk53wPpZ7Fo8CQHyg3RhlTWR8R_mksR_TDS-0PEcHKHTRFyVznF7gobrBQBS0zKxJJF4w3q8iAg8omdDIZTauQZEvybVryIro1Ta__Z4zx3vTkB0fmUIS_ziWooSwmUaby0XDNl3bNH8ytlM4HTdHznNPzrXRXS_NqOzc5YdQId2RMDS143N9ENIAaJswjpbZHT2n6TgU-21VtlUdjMq73_eTIh-9W7Yx-xsjv6sA7BY");'>
-              
-              <!-- Glass Overlay for subtle depth -->
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
-
-              <div class="w-full z-10 text-center mb-6 sm:mb-8 relative">
-                <h2 id="countdown" class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-lg transition-all duration-500 transform hover:scale-105 cursor-default"></h2>
-              </div>
-
-              <div class="flex flex-col md:flex-row gap-6 items-stretch flex-grow relative z-10">
-                <!-- Memo Section -->
-                <div id="hero-memo-section" class="md:w-7/12 lg:w-3/5 bg-black/40 backdrop-blur-lg border border-white/10 p-5 rounded-xl shadow-lg flex flex-col text-left transition-transform hover:bg-black/50">
-                  <h3 class="text-lg font-bold mb-3 text-gray-50 flex items-center gap-2">
-                    <i class="fas fa-sticky-note text-yellow-300"></i> 我的備忘錄
-                  </h3>
-                  <div class="flex flex-col sm:flex-row gap-3 mb-4">
-                    <input type="text" id="memo-input" class="flex-grow p-2.5 border border-white/20 bg-white/10 rounded-lg text-sm text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent focus:outline-none transition-all" placeholder="輸入代辦事項...">
-                    <button id="add-memo-button" class="hero-button-secondary whitespace-nowrap flex items-center justify-center shadow-lg">
-                       <i class="fas fa-plus mr-2"></i>新增
-                    </button>
-                  </div>
-                  <div id="memo-list-container" class="flex-grow max-h-32 overflow-y-auto space-y-2 pr-1">
-                    <!-- Memos will be injected here -->
-                  </div>
-                </div>
-                
-                <!-- Slideshow -->
-                <div id="slideshow-container" class="md:w-5/12 lg:w-2/5 flex-grow rounded-xl overflow-hidden shadow-2xl relative bg-black/20 border border-white/10 group">
-                  <img id="slideshow-image" src="read.png" alt="Slideshow" class="absolute inset-0 w-full h-full object-contain transition-all duration-700 transform group-hover:scale-105">
-                  <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-black/20"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Zone Selector -->
-            <div class="animate-fade-in-up delay-200 mt-12 mb-6 flex items-center gap-4">
-                <div class="h-8 w-1 bg-stone-400 rounded-full"></div>
-                <h2 id="explore-section-title" class="text-2xl font-bold text-stone-700">區域選擇</h2>
-            </div>
-            
-            <div class="animate-fade-in-up delay-300 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
-              <!-- Zone Cards -->
-              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-ai">
-                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf248VM36QyPrj4ChTENi15n8c1lWENeGrUr9K02R4Kw37gklrCm2BeZRUdWpWgzZ8Q-MFX1XbQwKU5mt8mpJXPNQ9W4BR8-ilTpLcOH0hIO2LHhFEW7hruCiSo5mwSrYu4BshjhxlX4145wZzhpAkmO_sFYqBT8zqchVZIIXKZXC2mpU5aqvyv3U7nwD_-4arYUUd5SHoWkBHbGfmb643y4Yo1cwaprpK91L6me2SXiZiXeVu9-tMV4msbcBXuGga1ApvGmEAKocM");'></div>
-                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
-                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">AI 區</p>
-                </div>
-              </div>
-
-              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-relax">
-                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYDJnmV-mTIYMgVe0BDK1p1WNrUcyE5qc6Ci1DUGC3IykmInRiU4Nca-R6z5cASWAOpGg1AUl3A6uMisY9vLR9EW5YBRdzr1dX-7xK5_8WlGBau3K-a5hVX-oX9UqwEw3-NX8LTe-RgaE8EA23-q50c-K4Y2iTapZ97dHeKjw7R3zvMmVbkJDXA51rLscTs1VJ4h35ZCdyT1GfIqaKeSjlT3AedPtVE8OlrkGS14HHfuvWoidqQl4wUN0doOz_vA8hJHhCz-u5EDVL");'></div>
-                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
-                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">放鬆區</p>
-                </div>
-              </div>
-
-              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-tools">
-                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjOFh3GDvcyMWCXARY4PFjxZ6gUYdQ7IY79BeMeqIVtnsgyK3HmeRDDWQ3OpoMHJdWzXyjzrRfy6PjWfKatJVou2x8P83XgKWeJ6_dHTQ3FZrUj85kn00gvscx6y_iv7OjVpKJ2vOg7uXgJUTLNbzlUKCVRVZTVS1tVS9TaNsmR6VQCeK1A7_K6vCsr5OSTOIxUyTz_kzcfKTv57Ri96GGA-6eVa5AvcleQFS4gKaO_GWMq4_khLmBL6hM1sS3JIQPP2dfD0EpMiF3");'></div>
-                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
-                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">工具區</p>
-                </div>
-              </div>
-
-              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-teach">
-                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL4tODmuFQhmwlyANmpYzx1DiXvV-tJwbYim_JlLsLxT_bzzOLdkaEf4RWVSQV_x5n7chQFGY9HScJKdk0NM4jNagLHveR8zTBNVb_l7HSI-_g5VT6aMBh1jLh-cxIewCLQS61QzD80JDyrwzOQQYkZDle0pUQ4lXddyeyYvBmYVwYpAiEPdSWYrMlFJkSsjpElpy9m_lio6-w6RGDf-GDaejH0lDt-f85jEkaTyZjwJNtxDukVxYPipJi0_8Ysskyp3fwDgbV2AkR");'></div>
-                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
-                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">教學區</p>
-                </div>
-              </div>
-
-              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-admin">
-                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZi7jCwJCkp3UOfhdZ3JGC1uUavCk0fQHYLm_kfY7D9EB8vWNfcvBin_G8wy1cjdn2tf51Leu4jxivD64PjKsr_LFBvhsmuH2eQfMByEOsWzWiJRjYS0rm1G4AtKPU6LK6MuBC7o1BbIF4xOWp0EZwg2sv88oBYhIK44L4pHpg2cFtdiX32K9MmiIn_anp4y4UzrWEtmJ1Lod_qIuXAjVnue-dgQMiUZW3C7AYfbzwUUVX9V7jCqWxyZVx7TB0cAm75xixPyeKcdtY");'></div>
-                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
-                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">行政區</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Dynamic Content Area -->
-            <div class="mt-10 min-h-[300px]">
-              <div id="zone-ai" class="zone-content hidden">
-                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">AI 區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fas fa-robot text-blue-500"></i> AI 工具</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://chat.openai.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">ChatGPT</a>
-                      <a href="https://claude.ai/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-600">Claude</a>
-                      <a href="https://www.perplexity.ai/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-teal-50 hover:text-teal-600">Perplexity</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fab fa-google text-red-500"></i> Google AI</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://makersuite.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">Google AI Studio</a>
-                      <a href="https://notebooklm.google/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-600">Notebook LM</a>
-                      <a href="https://gemini.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">Gemini</a>
-                      <a href="https://stitch.withgoogle.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-600">Stitch</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fas fa-graduation-cap text-green-500"></i> 教育用</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://app.edcafe.ai/me/home" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-600">EDcafe</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="zone-relax" class="zone-content hidden">
-                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">放鬆區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-users text-indigo-500 mr-2"></i>社群平台</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://www.facebook.com/" target="_blank" class="btn bg-stone-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
-                        <i class="fab fa-facebook mr-2"></i>Facebook
-                      </a>
-                      <a href="https://www.instagram.com/" target="_blank" class="btn bg-stone-100 hover:bg-pink-100 hover:text-pink-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
-                        <i class="fab fa-instagram mr-2"></i>Instagram
-                      </a>
-                      <a href="https://www.threads.net/" target="_blank" class="btn bg-stone-100 hover:bg-stone-200 hover:text-black rounded-lg px-4 py-3 text-center font-medium text-stone-700">
-                        <i class="fas fa-at mr-2"></i>Threads
-                      </a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-play-circle text-red-500 mr-2"></i>影片區</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://www.youtube.com/" target="_blank" class="btn bg-stone-100 hover:bg-red-100 hover:text-red-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
-                        <i class="fab fa-youtube mr-2"></i> YouTube
-                      </a>
-                      <a href="https://94580.net/" target="_blank" class="btn bg-stone-100 hover:bg-green-100 hover:text-green-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
-                        <i class="fas fa-film mr-2"></i> 94580
-                      </a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-shopping-cart text-orange-500 mr-2"></i>購物</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://www.momoshop.com.tw/" target="_blank" class="btn bg-stone-100 hover:bg-pink-50 hover:text-pink-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">momo購物網</a>
-                      <a href="https://shopee.tw/" target="_blank" class="btn bg-stone-100 hover:bg-orange-50 hover:text-orange-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">蝦皮購物</a>
-                      <a href="https://24h.pchome.com.tw/" target="_blank" class="btn bg-stone-100 hover:bg-blue-50 hover:text-blue-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">PChome 24h購物</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="zone-tools" class="zone-content hidden">
-                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">工具區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🛠️ 數位工具</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://drive.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">
-                        <i class="fas fa-hdd mr-2"></i> Google雲端
-                      </a>
-                      <a href="https://www.notion.so/ad970127ad4b44b79326d0123a8ba087" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-200 hover:text-black">
-                        <i class="fas fa-book mr-2"></i> Notion
-                      </a>
-                      <a href="https://keep.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">
-                        <i class="fas fa-sticky-note mr-2"></i> Keep
-                      </a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🔧 常用工具</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://calendar.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
-                        <i class="fas fa-calendar mr-2"></i> Google 日曆
-                      </a>
-                      <a href="https://mail.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">
-                        <i class="fas fa-envelope mr-2"></i> Gmail 信箱
-                      </a>
-                      <a href="https://translate.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
-                        <i class="fas fa-language mr-2"></i> Google 翻譯
-                      </a>
-                      <a href="https://github.com/chuoneone" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-800 hover:text-white">
-                        <i class="fab fa-github mr-2"></i> GitHub
-                      </a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📄 文書區</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://docs.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
-                        <i class="fas fa-file-alt mr-2"></i>Google 文件
-                      </a>
-                      <a href="https://slides.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">
-                        <i class="fas fa-file-powerpoint mr-2"></i>Google 簡報
-                      </a>
-                      <a href="https://sheets.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">
-                        <i class="fas fa-file-excel mr-2"></i>Google 試算表
-                      </a>
-                      <a href="https://forms.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">
-                        <i class="fas fa-list-alt mr-2"></i>Google 表單
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div id="zone-teach" class="zone-content hidden">
-                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">教學資源</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📁 書商資源</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林</a>
-                      <a href="https://nanibox3.oneclass.com.tw/resource" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">南一</a>
-                      <a href="https://digitalmaster.knsh.com.tw/v3/pages/j/index.html#year=1141&field=ma&grade=1%E5%B9%B4%E7%B4%9A&item=ebook&bookcase=online" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒</a>
-                      <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">翰林Wordwall</a>
-                      <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">康軒Wordwall</a>
-                      <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林數位學習平台</a>
-                      <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林期刊大師</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🛠️ 常用工具</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://classroom.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">Classroom</a>
-                      <a href="https://soundoftext.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">文字轉語音</a>
-                      <a href="https://login.microsoftonline.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">Office365</a>
-                      <a href="https://www.canva.com/zh_tw/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Canva</a>
-                      <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">計時</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🎮 互動軟體</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">Wordwall</a>
-                      <a href="https://quizizz.com/admin" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Quizizz</a>
-                      <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">Blooket</a>
-                      <a href="https://www.gimkit.com/me" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">Gimkit</a>
-                      <a href="https://create.kahoot.it/auth/login" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Kahoot</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🌟 上課用</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://aaclearningbackend.azurewebsites.net/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">AAC</a>
-                      <a href="https://www.learnmode.net/home/teach_courses" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">學習吧</a>
-                      <a href="https://teach.classdojo.com/#/login?redirect=%2Fclasses%2F6265f96593f3ace4537b5a94%2Fpoints" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">ClassDojo</a>
-                      <a href="https://sites.google.com/view/specialchu/home" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">線上學習區</a>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🧮 數學相關</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">子由數學</a>
-                      <a href="https://subjects.modernedu.hk/mce/apps/maths/www.mceducation.com.hk/apps/maths/index_ce.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">數學app</a>
-                      <a href="https://polypad.amplify.com/p" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">mathigon</a>
-                      <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒互動遊戲區</a>
-                      <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">繪圖計算機</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📝 國文相關</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">雄筆順</a>
-                      <a href="https://digitalmaster.knsh.com.tw/ju/chinese/matchgame/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">語文常識配對</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">💡 引起動機</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://digitalmaster.knsh.com.tw/ju/math/wake-up/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">腦力活化</a>
-                      <a href="https://toytheater.com/category/play/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Toy Theater</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">❓ 出題</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://nanipaper.oneclass.com.tw/login" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">南一出題</a>
-                      <a href="https://quiz.knsh.com.tw/create-steps/1/3ebf6dd56e59ad0e00097783ad193dd48b3207348f0f9b2c8620f050e1dff110" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒出題</a>
-                      <a href="https://testbank.hle.com.tw/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林出題</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="zone-admin" class="zone-content hidden">
-                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">行政資源</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">👥 行政</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://www.set.edu.tw/default.asp" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">特通網</a>
-                      <a href="https://eschool.hlc.edu.tw/web-sso/rest/Redirect/login/page/normal?returnUrl=https://eschool.hlc.edu.tw/WebAuth.do" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">全誼</a>
-                      <a href="https://news.hlc.edu.tw/index.php?cate_id=10&page=department" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">處務公告</a>
-                      <a href="https://srec.hlc.edu.tw/index.php" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">特教資源網</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📋 研習</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://special.moe.gov.tw/#/menuLayout/register/study" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">特教研習</a>
-                      <a href="https://www1.inservice.edu.tw/index2-3.aspx" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">全國研習</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📝 鑑定</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://drive.google.com/drive/folders/15F9f5dW6PHYode_w1opdEKLYkoNKmnMe" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">鑑定表單</a>
-                      <a href="http://spec.ntct.edu.tw/FileUploadCategoryListC003100.aspx?CategoryID=8da4d43d-3dd6-401a-8746-1ca93e53910e" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">計分EXCEL</a>
-                      <a href="https://sec.ntpc.edu.tw/p/406-1004-9160,r140.php" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">情緒處理表件</a>
-                    </div>
-                  </div>
-                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🎨 素材</h4>
-                    <div class="flex flex-col gap-3">
-                      <a href="https://www.irasutoya.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">irasutoya</a>
-                      <a href="https://www.flaticon.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">icon</a>
-                      <a href="https://chojugiga.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">鳥獸圖</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      <footer class="footer-morandi mt-auto">
-        Created by Chu Pei Yi
-      </footer>
-
-    </div>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const countdownElement = document.getElementById('countdown');
-        const zones = document.querySelectorAll('.zone-content');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const zoneCards = document.querySelectorAll('.zone-card');
-        const exploreSectionTitle = document.getElementById('explore-section-title');
-        
-        const hamburgerButton = document.getElementById('hamburger-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        const memoInput = document.getElementById('memo-input');
-        const addMemoButton = document.getElementById('add-memo-button');
-        const memoListContainer = document.getElementById('memo-list-container');
-        const LOCAL_STORAGE_MEMO_KEY = 'chupeiyi.memos.v1';
-
-        let activeZoneId = null; 
-        let memos = [];
-
-        // --- Slideshow Functionality (Improved) ---
-        const slideshowContainer = document.getElementById('slideshow-container');
-        if (slideshowContainer) {
-            const slideshowImageElement = document.getElementById('slideshow-image');
-            const slideshowImages = ['dog1.png', 'dog2.png', 'dog3.png', 'dog4.png', 'dog5.png', 'dog6.png']; 
-            let currentImageIndex = 0;
-
-            if (slideshowImageElement && slideshowImages.length > 0) {
-                slideshowImageElement.src = slideshowImages[0]; 
-
-                function changeSlide() {
-                    // Use CSS Opacity transition defined in Tailwind classes
-                    slideshowImageElement.style.opacity = 0;
-                    
-                    setTimeout(() => {
-                        currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
-                        slideshowImageElement.src = slideshowImages[currentImageIndex];
-                        slideshowImageElement.style.opacity = 1;
-                    }, 700); 
-                }
-                setInterval(changeSlide, 5000); 
-            }
-        }
-
-        // --- Countdown Function ---
-        function updateCountdown() {
-          if (!countdownElement) return;
-          const targetDate = new Date('2026-01-24');
-          const today = new Date();
-          const diffTime = targetDate - today;
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-          // Reset classes slightly
-          countdownElement.className = "text-3xl sm:text-5xl font-black tracking-tight drop-shadow-lg transition-all duration-500 transform hover:scale-105 cursor-default";
-
-          if (diffDays > 7) {
-            countdownElement.innerHTML = `寒假還有 <span class="text-outline-black">${diffDays}</span> 天`;
-          } else if (diffDays > 0) {
-            countdownElement.innerHTML = `寒假倒數 <span class="text-red-400 animate-pulse drop-shadow-xl">${diffDays}</span> 天！`;
-          } else if (diffDays === 0) {
-              countdownElement.innerHTML = `<span class="text-green-300 animate-bounce drop-shadow-xl">寒假就是今天！🎉</span>`;
-          } else {
-            const daysPast = Math.abs(diffDays);
-            countdownElement.innerHTML = `寒假已過 <span class="text-sky-300 drop-shadow-xl">${daysPast}</span> 天`;
-          }
-        }
-
-        // --- Zone Display Functions (Added Animation) ---
-        function showZone(zoneId, shouldScroll = true) {
-          // 1. Hide all zones
-          zones.forEach((zone) => {
-              zone.classList.add('hidden');
-              zone.classList.remove('animate-fade-in-up'); // Reset animation
-          });
-          
-          const targetZone = document.getElementById(zoneId);
-          if (targetZone) {
-            targetZone.classList.remove('hidden');
-            
-            // 2. Trigger Reflow to restart animation
-            void targetZone.offsetWidth; 
-            
-            // 3. Add Animation Class
-            targetZone.classList.add('animate-fade-in-up');
-
-            activeZoneId = zoneId; 
-
-            if (shouldScroll) {
-              setTimeout(() => {
-                // Scroll with a bit of offset for header
-                const yOffset = -90; 
-                const y = targetZone.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({top: y, behavior: 'smooth'});
-              }, 100);
-            }
-          } else {
-            activeZoneId = null; 
-          }
-          updateActiveLink(); 
-        }
-        
-        function updateActiveLink() {
-          navLinks.forEach(link => {
-            if (link.dataset.zone === activeZoneId) {
-              link.classList.add('active'); 
-            } else {
-              link.classList.remove('active');
-            }
-          });
-        }
-
-        // --- Hamburger Menu Logic ---
-        if (hamburgerButton && mobileMenu) {
-            hamburgerButton.addEventListener('click', () => {
-                const isMenuOpen = !mobileMenu.classList.contains('hidden');
-                mobileMenu.classList.toggle('hidden');
-                
-                // Add simple animation to menu appearance
-                if(!isMenuOpen) {
-                    mobileMenu.classList.add('animate-fade-in-up');
-                } else {
-                    mobileMenu.classList.remove('animate-fade-in-up');
-                }
-
-                const icon = hamburgerButton.querySelector('svg');
-                if (!isMenuOpen) { 
-                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-                } else { 
-                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
-                }
-            });
-
-            mobileMenu.querySelectorAll('a.nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth < 768) { 
-                         mobileMenu.classList.add('hidden');
-                         hamburgerButton.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        'wedu-black': '#1D1D1D',
+                        'wedu-yellow': '#FDC43F',
+                        'wedu-teal': '#00A99D',
+                        'wedu-red': '#FF6B6B',
+                        'wedu-gray': '#F9F9F9',
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #1D1D1D',
+                        'brutal-sm': '2px 2px 0px 0px #1D1D1D',
                     }
-                });
-            });
-        }
-
-        // --- Memo (Notes) Functionality ---
-        function loadMemos() {
-            const storedMemos = localStorage.getItem(LOCAL_STORAGE_MEMO_KEY);
-            if (storedMemos) {
-                memos = JSON.parse(storedMemos);
-            }
-            renderMemos(false); // false = don't animate on initial load
-        }
-
-        function saveMemos() {
-            localStorage.setItem(LOCAL_STORAGE_MEMO_KEY, JSON.stringify(memos));
-        }
-
-        function renderMemos(animate = true) {
-            if (!memoListContainer) return;
-            memoListContainer.innerHTML = ''; 
-            
-            if (memos.length === 0) {
-                const emptyMessage = document.createElement('div');
-                emptyMessage.innerHTML = '<i class="far fa-folder-open mb-2 text-2xl opacity-50"></i><p>暫無備忘事項</p>';
-                emptyMessage.classList.add('text-gray-300', 'text-xs', 'sm:text-sm', 'italic', 'text-center', 'py-4', 'flex', 'flex-col', 'items-center');
-                memoListContainer.appendChild(emptyMessage);
-                return;
-            }
-
-            memos.forEach((memo, index) => {
-                const memoItemDiv = document.createElement('div');
-                // Basic classes
-                memoItemDiv.classList.add('memo-item', 'flex', 'justify-between', 'items-center', 'bg-white/10', 'hover:bg-white/20', 'p-2', 'rounded-lg', 'text-xs', 'sm:text-sm', 'transition-all', 'border', 'border-white/5');
-                
-                // Animation class
-                if(animate && index === 0) {
-                    memoItemDiv.classList.add('memo-item-enter');
-                }
-                
-                memoItemDiv.dataset.id = memo.id;
-
-                const memoTextSpan = document.createElement('span');
-                memoTextSpan.classList.add('text-gray-100', 'break-all', 'mr-2', 'flex-grow', 'font-medium');
-                memoTextSpan.textContent = memo.text;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.classList.add('text-red-300', 'hover:text-red-400', 'hover:bg-red-400/20', 'focus:text-red-500', 'w-6', 'h-6', 'flex', 'items-center', 'justify-center', 'rounded-full', 'transition-colors');
-                deleteButton.innerHTML = '<i class="fas fa-times"></i>';
-                deleteButton.setAttribute('aria-label', '刪除備忘');
-
-                deleteButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    // Add exit animation
-                    memoItemDiv.style.transform = 'translateX(20px)';
-                    memoItemDiv.style.opacity = '0';
-                    setTimeout(() => {
-                        deleteMemo(memo.id);
-                    }, 200);
-                });
-
-                memoItemDiv.appendChild(memoTextSpan);
-                memoItemDiv.appendChild(deleteButton);
-                memoListContainer.appendChild(memoItemDiv);
-            });
-        }
-
-        function addMemoToList() {
-            if (!memoInput) return;
-            const text = memoInput.value.trim();
-            if (text === '') {
-                memoInput.focus();
-                return;
-            }
-
-            const newMemo = {
-                id: Date.now().toString(), 
-                text: text
-            };
-            memos.unshift(newMemo); 
-            memoInput.value = ''; 
-            saveMemos();
-            renderMemos(true); // Animate the new item
-            memoInput.focus();
-        }
-
-        function deleteMemo(id) {
-            memos = memos.filter(memo => memo.id !== id);
-            saveMemos();
-            renderMemos(false);
-        }
-
-        if (addMemoButton) {
-            addMemoButton.addEventListener('click', addMemoToList);
-        }
-        if (memoInput) {
-            memoInput.addEventListener('keypress', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault(); 
-                    addMemoToList();
-                }
-            });
-        }
-
-        // ---- Initializations ----
-        updateCountdown();
-        setInterval(updateCountdown, 1000 * 60 * 30); 
-
-        loadMemos(); 
-
-        updateActiveLink(); 
-
-        // ---- Event Listeners for Zone Navigation ----
-        navLinks.forEach((link) => {
-          link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const zoneId = link.dataset.zone;
-            if (zoneId) {
-              showZone(zoneId, true); 
-            }
-          });
-        });
-
-        zoneCards.forEach((card) => {
-          card.addEventListener('click', () => {
-            const zoneId = card.dataset.zone;
-            if (zoneId) {
-              showZone(zoneId, true); 
-            }
-          });
-        });
-        
-        if (exploreSectionTitle) {
-             // Optional: Add click listener to header to scroll down
-        }
-      });
+                },
+            },
+        };
     </script>
-  </body>
+
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1D1D1D;
+            overflow-x: hidden;
+        }
+
+        /* 自定義捲軸 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #1d1d1d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* 導覽列特效 */
+        .nav-link {
+            position: relative;
+            font-weight: 700;
+            color: #1D1D1D;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FDC43F;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 卡片與按鈕樣式 */
+        .resource-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        .resource-card:hover {
+            border-color: #1D1D1D;
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 0px 0px #FDC43F;
+        }
+        .card-link {
+            display: block;
+            padding: 12px 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-align: center;
+        }
+        .card-link:hover {
+            background-color: #1D1D1D;
+            color: #FDC43F;
+            border-color: #1D1D1D;
+        }
+        .btn-primary {
+            background-color: #FDC43F;
+            color: #1D1D1D;
+            font-weight: 900;
+            padding: 0.75rem 2rem;
+            border: 2px solid #1D1D1D;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0px 0px #1D1D1D;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1D1D1D;
+        }
+
+        /* Hero 功能卡片樣式 (備忘錄) */
+        .hero-card {
+            background: white;
+            border: 3px solid #1D1D1D;
+            border-radius: 1rem;
+            box-shadow: 6px 6px 0px 0px #FDC43F;
+            overflow: hidden;
+            height: 100%; /* 確保等高 */
+        }
+        
+        /* 備忘錄項目樣式 */
+        .memo-item {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* 動畫 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 隱藏/顯示控制 */
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen relative">
+
+    <!-- 導覽列 -->
+    <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center z-50 bg-white sticky top-0 shadow-sm border-b-2 border-gray-100">
+        <!-- Logo (點擊回首頁) -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('home')">
+            <div class="bg-wedu-black text-white p-2 rounded-lg transform -rotate-3 border-2 border-wedu-black shadow-brutal-sm">
+                <i class="fas fa-shapes text-xl"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xl font-extrabold tracking-tight leading-none font-sans">CHU</span>
+                <span class="text-sm font-bold text-gray-500 tracking-widest">PEI YI</span>
+            </div>
+        </div>
+
+        <!-- 電腦版選單 -->
+        <div class="hidden md:flex items-center gap-8">
+            <div onclick="switchView('ai')" class="nav-link text-base">AI 區</div>
+            <div onclick="switchView('relax')" class="nav-link text-base">放鬆區</div>
+            <div onclick="switchView('tools')" class="nav-link text-base">工具區</div>
+            <div onclick="switchView('teach')" class="nav-link text-base">教學區</div>
+            <div onclick="switchView('admin')" class="nav-link text-base">行政區</div>
+            <!-- 寒假倒數顯示 -->
+            <div id="nav-countdown" class="btn-primary text-base text-sm py-2 px-6 cursor-default min-w-[180px] text-center flex items-center justify-center gap-2">
+                <i class="fas fa-snowflake"></i> 載入中...
+            </div>
+        </div>
+
+        <!-- 手機版選單按鈕 -->
+        <button id="mobile-menu-btn" class="md:hidden text-2xl text-wedu-black focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- 主要內容容器 -->
+    <main class="flex-grow relative bg-white">
+        
+        <!-- 1. 首頁 (Hero) -->
+        <div id="view-home" class="view-section active fade-in w-full">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 pt-8 md:pt-12 pb-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                
+                <!-- 左側文字 -->
+                <div class="z-10 pt-4 lg:sticky lg:top-32">
+                    <div class="inline-block px-3 py-1 bg-wedu-yellow border-2 border-wedu-black rounded-full text-xs font-bold text-wedu-black mb-6 tracking-wider uppercase shadow-brutal-sm">
+                        SPEDMIX
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-wedu-black leading-tight mb-6 font-sans">
+                        Chu Pei Yi's<br>
+                        <span class="text-wedu-teal relative inline-block">
+                            Toolbox
+                            <!-- 裝飾線條 -->
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-wedu-yellow -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" />
+                            </svg>
+                        </span>
+                    </h1>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 items-start mb-12">
+                        <button onclick="switchView('ai')" class="bg-wedu-black text-white font-black py-3 px-8 rounded-lg shadow-[4px_4px_0px_0px_#FDC43F] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#FDC43F] transition-all text-lg border-2 border-wedu-black">
+                            開始探索
+                        </button>
+                        
+                        <!-- AI 快速連結按鈕 (取代圓圈) -->
+                        <div class="flex items-center gap-3 mt-4 sm:mt-0">
+                            <a href="https://chat.openai.com/" target="_blank" class="flex items-center gap-2 px-4 py-3 bg-white border-2 border-wedu-black rounded-lg font-bold hover:bg-gray-50 transition-transform hover:-translate-y-1 shadow-brutal-sm text-sm text-wedu-black">
+                                <i class="fas fa-robot text-teal-600 text-lg"></i> ChatGPT
+                            </a>
+                            <a href="https://gemini.google.com/" target="_blank" class="flex items-center gap-2 px-4 py-3 bg-white border-2 border-wedu-black rounded-lg font-bold hover:bg-gray-50 transition-transform hover:-translate-y-1 shadow-brutal-sm text-sm text-wedu-black">
+                                <i class="fab fa-google text-blue-600 text-lg"></i> Gemini
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 flex gap-8">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-wedu-black text-white p-2 rounded-md"><i class="fas fa-bolt"></i></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-wedu-black">高效</span>
+                                <span class="text-[10px] text-gray-500">快速工具</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-wedu-black text-white p-2 rounded-md"><i class="fas fa-layer-group"></i></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-wedu-black">整合</span>
+                                <span class="text-[10px] text-gray-500">分類資源</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側功能區塊 (僅保留備忘錄) -->
+                <div class="relative z-10 w-full">
+                    
+                    <!-- 備忘錄卡片 -->
+                    <div class="hero-card bg-white p-5 min-h-[320px] flex flex-col relative">
+                        <!-- 標題列 -->
+                        <div class="flex justify-between items-center mb-4 border-b-2 border-gray-100 pb-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-wedu-red border border-wedu-black"></div>
+                                <div class="w-3 h-3 rounded-full bg-wedu-yellow border border-wedu-black"></div>
+                                <h3 class="font-extrabold text-lg ml-1 text-wedu-black">備忘錄</h3>
+                            </div>
+                            <i class="fas fa-pencil-alt text-gray-400"></i>
+                        </div>
+
+                        <!-- 輸入區 -->
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" id="memo-input" 
+                                class="flex-grow px-3 py-2 border-2 border-wedu-black rounded-lg font-bold text-sm focus:ring-0 focus:border-wedu-teal outline-none transition-all bg-gray-50 placeholder-gray-400" 
+                                placeholder="事項...">
+                            <button id="add-memo-button" class="bg-wedu-black text-white px-3 py-2 rounded-lg font-bold hover:bg-gray-800 transition-colors border-2 border-wedu-black shadow-brutal-sm active:translate-y-[2px] active:shadow-none">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- 列表區 -->
+                        <div id="memo-list-container" class="flex-grow overflow-y-auto max-h-[240px] space-y-2 pr-1 custom-scrollbar">
+                            <!-- Memos will be injected here -->
+                            <div class="text-center text-gray-400 text-xs py-8 font-bold italic">
+                                暫無事項
+                            </div>
+                        </div>
+                        
+                        <!-- 裝飾釘子 -->
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-wedu-red border-2 border-wedu-black z-20"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. AI 區 -->
+        <div id="view-ai" class="view-section py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex items-center gap-4 mb-12 fade-in">
+                    <button onclick="switchView('home')" class="text-gray-400 hover:text-wedu-black transition-colors border-2 border-transparent hover:border-gray-200 p-2 rounded-full"><i class="fas fa-arrow-left text-2xl"></i></button>
+                    <div class="bg-wedu-yellow p-3 rounded-lg border-2 border-wedu-black shadow-brutal">
+                        <i class="fas fa-robot text-2xl text-wedu-black"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">AI 人工智慧區</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2 text-wedu-teal">熱門 AI 工具</h4>
+                        <div class="space-y-2">
+                            <a href="https://chat.openai.com/" target="_blank" class="card-link">ChatGPT</a>
+                            <a href="https://claude.ai/" target="_blank" class="card-link">Claude</a>
+                            <a href="https://www.perplexity.ai/" target="_blank" class="card-link">Perplexity</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2 text-wedu-red">Google AI</h4>
+                        <div class="space-y-2">
+                            <a href="https://gemini.google.com/" target="_blank" class="card-link">Gemini</a>
+                            <a href="https://notebooklm.google/" target="_blank" class="card-link">Notebook LM</a>
+                            <a href="https://makersuite.google.com/" target="_blank" class="card-link">AI Studio</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2 text-wedu-yellow">教育專用</h4>
+                        <div class="space-y-2">
+                            <a href="https://app.edcafe.ai/me/home" target="_blank" class="card-link">EDcafe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 放鬆區 -->
+        <div id="view-relax" class="view-section py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex items-center gap-4 mb-12 fade-in">
+                    <button onclick="switchView('home')" class="text-gray-400 hover:text-wedu-black transition-colors border-2 border-transparent hover:border-gray-200 p-2 rounded-full"><i class="fas fa-arrow-left text-2xl"></i></button>
+                    <div class="bg-wedu-teal p-3 rounded-lg border-2 border-wedu-black shadow-brutal">
+                        <i class="fas fa-coffee text-2xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">放鬆與休閒區</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">社群平台</h4>
+                        <div class="space-y-2">
+                            <a href="https://www.facebook.com/" target="_blank" class="card-link"><i class="fab fa-facebook text-blue-600 mr-2"></i>Facebook</a>
+                            <a href="https://www.instagram.com/" target="_blank" class="card-link"><i class="fab fa-instagram text-pink-600 mr-2"></i>Instagram</a>
+                            <a href="https://www.threads.net/" target="_blank" class="card-link"><i class="fas fa-at mr-2"></i>Threads</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">影音娛樂</h4>
+                        <div class="space-y-2">
+                            <a href="https://www.youtube.com/" target="_blank" class="card-link"><i class="fab fa-youtube text-red-600 mr-2"></i>YouTube</a>
+                            <a href="https://94580.net/" target="_blank" class="card-link">94580</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">線上購物</h4>
+                        <div class="space-y-2">
+                            <a href="https://shopee.tw/" target="_blank" class="card-link">蝦皮購物</a>
+                            <a href="https://www.momoshop.com.tw/" target="_blank" class="card-link">Momo購物</a>
+                            <a href="https://24h.pchome.com.tw/" target="_blank" class="card-link">PChome 24h</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 工具區 -->
+        <div id="view-tools" class="view-section py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex items-center gap-4 mb-12 fade-in">
+                    <button onclick="switchView('home')" class="text-gray-400 hover:text-wedu-black transition-colors border-2 border-transparent hover:border-gray-200 p-2 rounded-full"><i class="fas fa-arrow-left text-2xl"></i></button>
+                    <div class="bg-wedu-red p-3 rounded-lg border-2 border-wedu-black shadow-brutal">
+                        <i class="fas fa-tools text-2xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">實用工具區</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">雲端工具</h4>
+                        <div class="space-y-2">
+                            <a href="https://drive.google.com/" target="_blank" class="card-link">Google Drive</a>
+                            <a href="https://www.notion.so/" target="_blank" class="card-link">Notion</a>
+                            <a href="https://keep.google.com/" target="_blank" class="card-link">Keep</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">日常服務</h4>
+                        <div class="space-y-2">
+                            <a href="https://calendar.google.com/" target="_blank" class="card-link">Google 日曆</a>
+                            <a href="https://mail.google.com/" target="_blank" class="card-link">Gmail</a>
+                            <a href="https://translate.google.com/" target="_blank" class="card-link">Google 翻譯</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">文書處理</h4>
+                        <div class="space-y-2">
+                            <a href="https://docs.google.com/" target="_blank" class="card-link">Google 文件</a>
+                            <a href="https://slides.google.com/" target="_blank" class="card-link">Google 簡報</a>
+                            <a href="https://sheets.google.com/" target="_blank" class="card-link">Google 試算表</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 教學區 -->
+        <div id="view-teach" class="view-section py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex items-center gap-4 mb-12 fade-in">
+                    <button onclick="switchView('home')" class="text-gray-400 hover:text-wedu-black transition-colors border-2 border-transparent hover:border-gray-200 p-2 rounded-full"><i class="fas fa-arrow-left text-2xl"></i></button>
+                    <div class="bg-wedu-black p-3 rounded-lg border-2 border-wedu-black shadow-[4px_4px_0px_0px_#FDC43F]">
+                        <i class="fas fa-book-open text-2xl text-wedu-yellow"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">教學資源區</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">書商資源</h4>
+                        <div class="space-y-2">
+                            <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html" target="_blank" class="card-link">翰林電子書</a>
+                            <a href="https://nanibox3.oneclass.com.tw/resource" target="_blank" class="card-link">南一資源</a>
+                            <a href="https://digitalmaster.knsh.com.tw/" target="_blank" class="card-link">康軒資源</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">互動軟體</h4>
+                        <div class="space-y-2">
+                            <a href="https://wordwall.net/" target="_blank" class="card-link">Wordwall</a>
+                            <a href="https://quizizz.com/" target="_blank" class="card-link">Quizizz</a>
+                            <a href="https://create.kahoot.it/" target="_blank" class="card-link">Kahoot</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">學科輔助</h4>
+                        <div class="space-y-2">
+                            <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="card-link">子由數學</a>
+                            <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="card-link">雄筆順</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">出題系統</h4>
+                        <div class="space-y-2">
+                            <a href="https://nanipaper.oneclass.com.tw/" target="_blank" class="card-link">南一出題</a>
+                            <a href="https://testbank.hle.com.tw/" target="_blank" class="card-link">翰林出題</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 行政區 -->
+        <div id="view-admin" class="view-section py-12 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex items-center gap-4 mb-12 fade-in">
+                    <button onclick="switchView('home')" class="text-gray-400 hover:text-wedu-black transition-colors border-2 border-transparent hover:border-gray-200 p-2 rounded-full"><i class="fas fa-arrow-left text-2xl"></i></button>
+                    <div class="bg-wedu-gray p-3 rounded-lg border-2 border-wedu-black shadow-brutal">
+                        <i class="fas fa-briefcase text-2xl text-wedu-black"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">行政資源區</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in" style="animation-delay: 0.1s;">
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">行政系統</h4>
+                        <div class="space-y-2">
+                            <a href="https://www.set.edu.tw/" target="_blank" class="card-link">特通網</a>
+                            <a href="https://srec.hlc.edu.tw/" target="_blank" class="card-link">特教資源網</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">研習進修</h4>
+                        <div class="space-y-2">
+                            <a href="https://special.moe.gov.tw/" target="_blank" class="card-link">特教研習</a>
+                            <a href="https://www1.inservice.edu.tw/" target="_blank" class="card-link">全國研習</a>
+                        </div>
+                    </div>
+                    <div class="resource-card p-6">
+                        <h4 class="font-bold text-lg mb-4">教材素材</h4>
+                        <div class="space-y-2">
+                            <a href="https://www.irasutoya.com/" target="_blank" class="card-link">Irasutoya</a>
+                            <a href="https://www.flaticon.com/" target="_blank" class="card-link">Flaticon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (固定在最下方) -->
+    <footer class="bg-wedu-yellow py-4 mt-auto border-t-2 border-wedu-black">
+        <!-- 黃色波浪 SVG -->
+        <div class="absolute top-0 left-0 w-full overflow-hidden leading-none transform -translate-y-full rotate-180" style="height: 40px;">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-full block fill-wedu-yellow">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+
+            <p class="text-wedu-black font-bold text-sm">
+                © 2025 Chu Pei Yi. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 核心邏輯：備忘錄 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const memoInput = document.getElementById('memo-input');
+            const addMemoButton = document.getElementById('add-memo-button');
+            const memoListContainer = document.getElementById('memo-list-container');
+            const LOCAL_STORAGE_MEMO_KEY = 'chupeiyi.memos.v2';
+            let memos = [];
+
+            // 備忘錄功能
+            function loadMemos() {
+                const storedMemos = localStorage.getItem(LOCAL_STORAGE_MEMO_KEY);
+                if (storedMemos) memos = JSON.parse(storedMemos);
+                renderMemos();
+            }
+
+            function saveMemos() {
+                localStorage.setItem(LOCAL_STORAGE_MEMO_KEY, JSON.stringify(memos));
+            }
+
+            function renderMemos() {
+                if (!memoListContainer) return;
+                memoListContainer.innerHTML = '';
+
+                if (memos.length === 0) {
+                    memoListContainer.innerHTML = `
+                        <div class="text-center text-gray-300 text-sm py-8 font-bold italic flex flex-col items-center">
+                            <i class="far fa-clipboard mb-2 text-2xl"></i>
+                            暫無事項，試著新增一條吧！
+                        </div>`;
+                    return;
+                }
+
+                memos.forEach(memo => {
+                    const div = document.createElement('div');
+                    div.className = 'memo-item flex justify-between items-center bg-wedu-gray p-3 rounded-lg border-l-4 border-wedu-teal shadow-sm mb-2';
+                    div.innerHTML = `
+                        <span class="text-sm text-wedu-black break-all font-bold">${memo.text}</span>
+                        <button class="text-gray-400 hover:text-wedu-red transition-colors p-1" onclick="deleteMemo('${memo.id}')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    `;
+                    memoListContainer.appendChild(div);
+                });
+            }
+
+            window.deleteMemo = function(id) {
+                memos = memos.filter(m => m.id !== id);
+                saveMemos();
+                renderMemos();
+            };
+
+            function addMemo() {
+                const text = memoInput.value.trim();
+                if (!text) return;
+                const newMemo = { id: Date.now().toString(), text };
+                memos.unshift(newMemo);
+                saveMemos();
+                renderMemos();
+                memoInput.value = '';
+            }
+
+            if (addMemoButton) addMemoButton.addEventListener('click', addMemo);
+            if (memoInput) {
+                memoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') addMemo();
+                });
+            }
+
+            loadMemos();
+
+            // 倒數計時功能
+            function updateCountdown() {
+                const countdownElement = document.getElementById('nav-countdown'); 
+                if (!countdownElement) return;
+                
+                const targetDate = new Date('2026-01-24');
+                const today = new Date();
+                const diffTime = targetDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                let countdownText = '';
+                if (diffDays > 0) {
+                    countdownText = `寒假倒數 ${diffDays} 天！`;
+                } else if (diffDays === 0) {
+                    countdownText = `寒假就是今天！🎉`;
+                } else {
+                    countdownText = `寒假已過 ${Math.abs(diffDays)} 天`;
+                }
+                // Update button content but keep icon
+                countdownElement.innerHTML = `<i class="fas fa-snowflake mr-2"></i> ${countdownText}`;
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 60000);
+        });
+
+        // 視圖切換邏輯
+        function switchView(viewId) {
+            // 1. 隱藏所有視圖
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // 2. 顯示目標視圖
+            const target = document.getElementById('view-' + viewId);
+            if(target) {
+                target.classList.add('active');
+                // 重置動畫
+                target.classList.remove('fade-in');
+                void target.offsetWidth; // trigger reflow
+                target.classList.add('fade-in');
+            }
+            
+            // 捲動到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 關閉手機選單
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
+        }
+
+        // 手機版選單控制
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const nav = document.querySelector('nav');
+        let mobileMenuDiv = document.getElementById('mobile-menu');
+
+        if (!mobileMenuDiv) {
+            mobileMenuDiv = document.createElement('div');
+            mobileMenuDiv.id = 'mobile-menu';
+            mobileMenuDiv.className = 'md:hidden absolute top-20 left-0 w-full bg-white shadow-xl border-t border-gray-100 hidden flex-col p-6 gap-4 z-40';
+            mobileMenuDiv.innerHTML = `
+                <div onclick="switchView('ai')" class="block py-2 font-bold text-wedu-black cursor-pointer border-b border-gray-100">AI 區</div>
+                <div onclick="switchView('relax')" class="block py-2 font-bold text-wedu-black cursor-pointer border-b border-gray-100">放鬆區</div>
+                <div onclick="switchView('tools')" class="block py-2 font-bold text-wedu-black cursor-pointer border-b border-gray-100">工具區</div>
+                <div onclick="switchView('teach')" class="block py-2 font-bold text-wedu-black cursor-pointer border-b border-gray-100">教學區</div>
+                <div onclick="switchView('admin')" class="block py-2 font-bold text-wedu-black cursor-pointer">行政區</div>
+            `;
+            nav.appendChild(mobileMenuDiv);
+        }
+
+        function toggleMobileMenu() {
+            mobileMenuDiv.classList.toggle('hidden');
+            mobileMenuDiv.classList.toggle('flex');
+            const icon = mobileBtn.querySelector('i');
+            if (mobileMenuDiv.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMobileMenu);
+    </script>
+</body>
 </html>
