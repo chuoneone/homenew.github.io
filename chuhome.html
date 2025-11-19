@@ -13,7 +13,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -23,308 +23,403 @@
     <style>
       body {
         font-family: "Work Sans", "Noto Sans", sans-serif;
-        background-color: #eaeaea;
+        background-color: #f3f4f6; /* 稍微亮一點的灰背景 */
+        overflow-x: hidden; /* 防止滑入動畫導致水平捲軸 */
       }
-
       html {
         scroll-behavior: smooth;
       }
+
+      /* --- 動畫定義 --- */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .animate-fade-in-up {
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      
+      .animate-scale-in {
+        animation: scaleIn 0.5s ease-out forwards;
+      }
+
+      /* 延遲動畫類別，用於依序進場 */
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
+      .delay-400 { animation-delay: 400ms; }
+
       .zone-content {
-        scroll-margin-top: 80px; /* Header height + some padding */
+        scroll-margin-top: 100px;
       }
       #explore-section-title {
-        scroll-margin-top: 80px; /* Header height + some padding */
+        scroll-margin-top: 100px;
       }
-      /* Active nav link style */
-      /* 導覽列連結：預設文字顏色清楚、hover 有感 */
+
+      /* 導覽列連結特效 */
       .nav-link {
-        color: #333 !important;           /* 預設深灰，清楚可讀 */
+        color: #4b5563;
         font-weight: 500;
+        position: relative;
+        padding-bottom: 2px;
+      }
+      
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #78716c; /* Stone-500 */
+        transition: width 0.3s ease-in-out;
       }
 
       .nav-link:hover {
-        color: #111 !important;           /* hover 再深一點 */
+        color: #1c1917; 
+      }
+      
+      .nav-link:hover::after {
+        width: 100%;
       }
 
-      /* 導覽列 active 狀態：更醒目 */
       .nav-link.active {
-        color: #7d7d7d !important;        /* 莫蘭迪風格強調色 */
+        color: #000 !important;
         font-weight: 700 !important;
       }
+      
+      .nav-link.active::after {
+        width: 100%;
+        background-color: #44403c;
+      }
 
-      /* Custom scrollbar for memo list */
+      /* 備忘錄捲軸優化 */
       #memo-list-container::-webkit-scrollbar {
         width: 6px;
       }
       #memo-list-container::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
         border-radius: 3px;
       }
       #memo-list-container::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 3px;
       }
       #memo-list-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.4);
       }
 
+      /* 按鈕特效 */
       .hero-button-secondary {
-        background-color: #c0bdb8;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.3);
         color: #fff;
         font-weight: 600;
         border-radius: 0.375rem;
         padding: 0.5rem 1rem;
-        transition: background-color 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
       }
       .hero-button-secondary:hover {
-        background-color: #9e9b96;
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       }
 
-      .nav-link.active {
-        color: #7d7d7d !important;
-        font-weight: bold;
+      .btn {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
       }
-
-
       .btn:hover {
-        background-color: #cfcfcf !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        background-color: #e5e7eb !important; /* gray-200 -> gray-300 hover logic replacement */
+      }
+      .btn:active {
+        transform: translateY(-1px);
       }
 
       .text-outline-black {
         color: #ffffff;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px  1px 0 #000,
-          1px  1px 0 #000;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
       }
 
       .footer-morandi {
-        background-color: #c0bdb8; /* 莫蘭迪主灰 */
+        background-color: #a8a29e; /* Stone-400 */
         color: white;
         text-align: center;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
         font-size: 0.875rem;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px  1px 0 #000,
-          1px  1px 0 #000;
+        box-shadow: inner 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      /* 卡片動態效果 */
+      .zone-card-bg {
+        transition: transform 0.5s ease;
+      }
+      .zone-card:hover .zone-card-bg {
+        transform: scale(1.1);
+      }
+      .zone-card-overlay {
+        transition: background-color 0.3s ease;
       }
 
-
-
+      /* 備忘錄項目進場動畫 */
+      .memo-item-enter {
+        animation: fadeInUp 0.3s ease-out forwards;
+      }
     </style>
   </head>
   <body>
-    <div class="relative min-h-screen flex flex-col bg-white group/design-root">
-
+    <div class="relative min-h-screen flex flex-col bg-stone-50 group/design-root overflow-hidden">
       <div class="layout-container flex grow flex-col">
-        <header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-b-stone-400 bg-stone-100 px-4 sm:px-10 py-3 backdrop-blur-md">
-  <div class="flex items-center gap-4 text-stone-700">
-    <img src="read.png" alt="Read Logo" class="h-5 w-5">
-    <h2 class="text-lg font-bold">CHU PEI YI</h2>
-  </div>
+        
+        <!-- Header -->
+        <header class="sticky top-0 z-50 flex items-center justify-between border-b border-stone-200/60 bg-stone-100/80 px-4 sm:px-10 py-3 backdrop-blur-md shadow-sm transition-all duration-300 animate-fade-in-up">
+          <div class="flex items-center gap-4 text-stone-700 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <div class="relative group">
+                <img src="read.png" alt="Read Logo" class="h-8 w-8 transition-transform duration-300 group-hover:rotate-12">
+                <div class="absolute -inset-2 bg-stone-400 rounded-full opacity-0 group-hover:opacity-20 blur transition-opacity"></div>
+            </div>
+            <h2 class="text-xl font-bold tracking-wide text-stone-800">CHU PEI YI</h2>
+          </div>
 
-  <div class="md:hidden">
-    <button id="hamburger-button" class="text-stone-700 hover:text-stone-900 focus:outline-none">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-      </svg>
-    </button>
-  </div>
+          <div class="md:hidden">
+            <button id="hamburger-button" class="text-stone-600 hover:text-stone-900 focus:outline-none p-2 rounded-md hover:bg-stone-200/50 transition-colors">
+              <svg class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              </svg>
+            </button>
+          </div>
 
-  <nav id="mobile-menu" class="hidden md:flex md:items-center md:gap-8 absolute md:static top-[60px] left-0 w-full md:w-auto bg-stone-100 md:bg-transparent shadow-lg md:shadow-none py-4 md:py-0 px-4 md:px-0 rounded-b-lg md:rounded-none">
-    <a href="javascript:void(0);" data-zone="zone-ai" class="nav-link block md:inline text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors py-2 md:py-0">AI 區</a>
-    <a href="javascript:void(0);" data-zone="zone-relax" class="nav-link block md:inline text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors py-2 md:py-0">放鬆區</a>
-    <a href="javascript:void(0);" data-zone="zone-tools" class="nav-link block md:inline text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors py-2 md:py-0">工具區</a>
-    <a href="javascript:void(0);" data-zone="zone-teach" class="nav-link block md:inline text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors py-2 md:py-0">教學區</a>
-    <a href="javascript:void(0);" data-zone="zone-admin" class="nav-link block md:inline text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors py-2 md:py-0">行政區</a>
-  </nav>
-</header>
+          <nav id="mobile-menu" class="hidden md:flex md:items-center md:gap-8 absolute md:static top-[60px] left-0 w-full md:w-auto bg-stone-100/95 md:bg-transparent shadow-lg md:shadow-none py-4 md:py-0 px-4 md:px-0 border-b md:border-b-0 border-stone-200">
+            <a href="javascript:void(0);" data-zone="zone-ai" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">AI 區</a>
+            <a href="javascript:void(0);" data-zone="zone-relax" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">放鬆區</a>
+            <a href="javascript:void(0);" data-zone="zone-tools" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">工具區</a>
+            <a href="javascript:void(0);" data-zone="zone-teach" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0 border-b md:border-b-0 border-stone-200/50">教學區</a>
+            <a href="javascript:void(0);" data-zone="zone-admin" class="nav-link block md:inline text-base font-medium transition-colors py-3 md:py-0">行政區</a>
+          </nav>
+        </header>
 
-
-        <div class="px-4 md:px-40 py-5">
-          <div class="max-w-[960px] mx-auto">
-            <div class="min-h-[380px] sm:min-h-[420px] bg-cover bg-center bg-no-repeat rounded-lg p-4 sm:p-6 text-white relative flex flex-col"
-              style='background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.75)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAi0g2nGKg6VXLAAS1OjnmFqiQHAx1AA32Mk53wPpZ7Fo8CQHyg3RhlTWR8R_mksR_TDS-0PEcHKHTRFyVznF7gobrBQBS0zKxJJF4w3q8iAg8omdDIZTauQZEvybVryIro1Ta__Z4zx3vTkB0fmUIS_ziWooSwmUaby0XDNl3bNH8ytlM4HTdHznNPzrXRXS_NqOzc5YdQId2RMDS143N9ENIAaJswjpbZHT2n6TgU-21VtlUdjMq73_eTIh-9W7Yx-xsjv6sA7BY");'>
+        <div class="px-4 md:px-10 lg:px-40 py-8">
+          <div class="max-w-[1024px] mx-auto">
+            
+            <!-- Hero Section -->
+            <div class="animate-fade-in-up delay-100 min-h-[380px] sm:min-h-[420px] bg-cover bg-center bg-no-repeat rounded-2xl p-6 sm:p-8 text-white relative flex flex-col shadow-2xl overflow-hidden transform transition-all hover:shadow-stone-500/20"
+              style='background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAi0g2nGKg6VXLAAS1OjnmFqiQHAx1AA32Mk53wPpZ7Fo8CQHyg3RhlTWR8R_mksR_TDS-0PEcHKHTRFyVznF7gobrBQBS0zKxJJF4w3q8iAg8omdDIZTauQZEvybVryIro1Ta__Z4zx3vTkB0fmUIS_ziWooSwmUaby0XDNl3bNH8ytlM4HTdHznNPzrXRXS_NqOzc5YdQId2RMDS143N9ENIAaJswjpbZHT2n6TgU-21VtlUdjMq73_eTIh-9W7Yx-xsjv6sA7BY");'>
               
-              <div class="w-full z-10 text-center mb-4 sm:mb-6">
-                <h2 id="countdown" class="text-3xl sm:text-4xl font-bold tracking-tight text-shadow-sm"></h2> 
+              <!-- Glass Overlay for subtle depth -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none"></div>
+
+              <div class="w-full z-10 text-center mb-6 sm:mb-8 relative">
+                <h2 id="countdown" class="text-3xl sm:text-5xl font-black tracking-tight drop-shadow-lg transition-all duration-500 transform hover:scale-105 cursor-default"></h2>
               </div>
 
-              <div class="flex flex-col md:flex-row gap-4 sm:gap-6 items-stretch flex-grow">
-
-                <div id="hero-memo-section" class="md:w-7/12 lg:w-3/5 bg-black bg-opacity-60 backdrop-blur-md p-3 sm:p-4 rounded-lg shadow-xl z-10 flex flex-col text-left">
-                  <h3 class="text-md sm:text-lg font-semibold mb-2 text-gray-100">我的備忘錄</h3>
-                  <div class="flex flex-col sm:flex-row gap-2 mb-3">
-                    <input type="text" id="memo-input" class="flex-grow p-2 border border-gray-600 bg-gray-700 bg-opacity-60 rounded-md text-sm text-gray-50 focus:ring-blue-400 focus:border-blue-400 placeholder-gray-300" placeholder="新增備忘...">
-                    <button id="add-memo-button" class="hero-button-secondary px-3 py-2 sm:px-4 text-sm whitespace-nowrap"> 
-                      <i class="fas fa-plus mr-1 sm:mr-2"></i>新增
+              <div class="flex flex-col md:flex-row gap-6 items-stretch flex-grow relative z-10">
+                <!-- Memo Section -->
+                <div id="hero-memo-section" class="md:w-7/12 lg:w-3/5 bg-black/40 backdrop-blur-lg border border-white/10 p-5 rounded-xl shadow-lg flex flex-col text-left transition-transform hover:bg-black/50">
+                  <h3 class="text-lg font-bold mb-3 text-gray-50 flex items-center gap-2">
+                    <i class="fas fa-sticky-note text-yellow-300"></i> 我的備忘錄
+                  </h3>
+                  <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                    <input type="text" id="memo-input" class="flex-grow p-2.5 border border-white/20 bg-white/10 rounded-lg text-sm text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent focus:outline-none transition-all" placeholder="輸入代辦事項...">
+                    <button id="add-memo-button" class="hero-button-secondary whitespace-nowrap flex items-center justify-center shadow-lg">
+                       <i class="fas fa-plus mr-2"></i>新增
                     </button>
                   </div>
-                  <div id="memo-list-container" class="flex-grow max-h-28 sm:max-h-32 overflow-y-auto space-y-1.5 sm:space-y-2 pr-1 sm:pr-2">
-                    </div>
+                  <div id="memo-list-container" class="flex-grow max-h-32 overflow-y-auto space-y-2 pr-1">
+                    <!-- Memos will be injected here -->
+                  </div>
                 </div>
                 
-                <div id="slideshow-container" class="md:w-5/12 lg:w-2/5 flex-grow rounded-lg overflow-hidden shadow-xl z-10 relative bg-black bg-opacity-20">
-                  <img id="slideshow-image" src="read.png" alt="Slideshow" class="absolute inset-0 w-full h-full object-contain opacity-100">
+                <!-- Slideshow -->
+                <div id="slideshow-container" class="md:w-5/12 lg:w-2/5 flex-grow rounded-xl overflow-hidden shadow-2xl relative bg-black/20 border border-white/10 group">
+                  <img id="slideshow-image" src="read.png" alt="Slideshow" class="absolute inset-0 w-full h-full object-contain transition-all duration-700 transform group-hover:scale-105">
+                  <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent to-black/20"></div>
                 </div>
-
               </div>
             </div>
-            <h2 id="explore-section-title" class="text-xl font-bold mt-8 mb-3">選擇你的區域</h2>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
 
-          <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-lg" data-zone="zone-ai">
-            <div class="aspect-square bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf248VM36QyPrj4ChTENi15n8c1lWENeGrUr9K02R4Kw37gklrCm2BeZRUdWpWgzZ8Q-MFX1XbQwKU5mt8mpJXPNQ9W4BR8-ilTpLcOH0hIO2LHhFEW7hruCiSo5mwSrYu4BshjhxlX4145wZzhpAkmO_sFYqBT8zqchVZIIXKZXC2mpU5aqvyv3U7nwD_-4arYUUd5SHoWkBHbGfmb643y4Yo1cwaprpK91L6me2SXiZiXeVu9-tMV4msbcBXuGga1ApvGmEAKocM");'></div>
-            <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
-              <p class="text-white text-2xl font-semibold group-hover:text-blue-300 transition-colors">AI 區</p>
+            <!-- Zone Selector -->
+            <div class="animate-fade-in-up delay-200 mt-12 mb-6 flex items-center gap-4">
+                <div class="h-8 w-1 bg-stone-400 rounded-full"></div>
+                <h2 id="explore-section-title" class="text-2xl font-bold text-stone-700">區域選擇</h2>
             </div>
-          </div>
+            
+            <div class="animate-fade-in-up delay-300 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6">
+              <!-- Zone Cards -->
+              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-ai">
+                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBf248VM36QyPrj4ChTENi15n8c1lWENeGrUr9K02R4Kw37gklrCm2BeZRUdWpWgzZ8Q-MFX1XbQwKU5mt8mpJXPNQ9W4BR8-ilTpLcOH0hIO2LHhFEW7hruCiSo5mwSrYu4BshjhxlX4145wZzhpAkmO_sFYqBT8zqchVZIIXKZXC2mpU5aqvyv3U7nwD_-4arYUUd5SHoWkBHbGfmb643y4Yo1cwaprpK91L6me2SXiZiXeVu9-tMV4msbcBXuGga1ApvGmEAKocM");'></div>
+                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
+                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">AI 區</p>
+                </div>
+              </div>
 
-          <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-lg" data-zone="zone-relax">
-            <div class="aspect-square bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYDJnmV-mTIYMgVe0BDK1p1WNrUcyE5qc6Ci1DUGC3IykmInRiU4Nca-R6z5cASWAOpGg1AUl3A6uMisY9vLR9EW5YBRdzr1dX-7xK5_8WlGBau3K-a5hVX-oX9UqwEw3-NX8LTe-RgaE8EA23-q50c-K4Y2iTapZ97dHeKjw7R3zvMmVbkJDXA51rLscTs1VJ4h35ZCdyT1GfIqaKeSjlT3AedPtVE8OlrkGS14HHfuvWoidqQl4wUN0doOz_vA8hJHhCz-u5EDVL");'></div>
-            <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
-              <p class="text-white text-2xl font-semibold group-hover:text-blue-300 transition-colors">放鬆區</p>
+              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-relax">
+                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYDJnmV-mTIYMgVe0BDK1p1WNrUcyE5qc6Ci1DUGC3IykmInRiU4Nca-R6z5cASWAOpGg1AUl3A6uMisY9vLR9EW5YBRdzr1dX-7xK5_8WlGBau3K-a5hVX-oX9UqwEw3-NX8LTe-RgaE8EA23-q50c-K4Y2iTapZ97dHeKjw7R3zvMmVbkJDXA51rLscTs1VJ4h35ZCdyT1GfIqaKeSjlT3AedPtVE8OlrkGS14HHfuvWoidqQl4wUN0doOz_vA8hJHhCz-u5EDVL");'></div>
+                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
+                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">放鬆區</p>
+                </div>
+              </div>
+
+              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-tools">
+                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjOFh3GDvcyMWCXARY4PFjxZ6gUYdQ7IY79BeMeqIVtnsgyK3HmeRDDWQ3OpoMHJdWzXyjzrRfy6PjWfKatJVou2x8P83XgKWeJ6_dHTQ3FZrUj85kn00gvscx6y_iv7OjVpKJ2vOg7uXgJUTLNbzlUKCVRVZTVS1tVS9TaNsmR6VQCeK1A7_K6vCsr5OSTOIxUyTz_kzcfKTv57Ri96GGA-6eVa5AvcleQFS4gKaO_GWMq4_khLmBL6hM1sS3JIQPP2dfD0EpMiF3");'></div>
+                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
+                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">工具區</p>
+                </div>
+              </div>
+
+              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-teach">
+                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL4tODmuFQhmwlyANmpYzx1DiXvV-tJwbYim_JlLsLxT_bzzOLdkaEf4RWVSQV_x5n7chQFGY9HScJKdk0NM4jNagLHveR8zTBNVb_l7HSI-_g5VT6aMBh1jLh-cxIewCLQS61QzD80JDyrwzOQQYkZDle0pUQ4lXddyeyYvBmYVwYpAiEPdSWYrMlFJkSsjpElpy9m_lio6-w6RGDf-GDaejH0lDt-f85jEkaTyZjwJNtxDukVxYPipJi0_8Ysskyp3fwDgbV2AkR");'></div>
+                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
+                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">教學區</p>
+                </div>
+              </div>
+
+              <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-zone="zone-admin">
+                <div class="zone-card-bg aspect-square bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZi7jCwJCkp3UOfhdZ3JGC1uUavCk0fQHYLm_kfY7D9EB8vWNfcvBin_G8wy1cjdn2tf51Leu4jxivD64PjKsr_LFBvhsmuH2eQfMByEOsWzWiJRjYS0rm1G4AtKPU6LK6MuBC7o1BbIF4xOWp0EZwg2sv88oBYhIK44L4pHpg2cFtdiX32K9MmiIn_anp4y4UzrWEtmJ1Lod_qIuXAjVnue-dgQMiUZW3C7AYfbzwUUVX9V7jCqWxyZVx7TB0cAm75xixPyeKcdtY");'></div>
+                <div class="zone-card-overlay absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 flex items-center justify-center backdrop-blur-[1px] group-hover:backdrop-blur-none">
+                  <p class="text-white text-xl sm:text-2xl font-bold tracking-wider drop-shadow-md transform transition-transform duration-300 group-hover:-translate-y-2">行政區</p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-lg" data-zone="zone-tools">
-            <div class="aspect-square bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDjOFh3GDvcyMWCXARY4PFjxZ6gUYdQ7IY79BeMeqIVtnsgyK3HmeRDDWQ3OpoMHJdWzXyjzrRfy6PjWfKatJVou2x8P83XgKWeJ6_dHTQ3FZrUj85kn00gvscx6y_iv7OjVpKJ2vOg7uXgJUTLNbzlUKCVRVZTVS1tVS9TaNsmR6VQCeK1A7_K6vCsr5OSTOIxUyTz_kzcfKTv57Ri96GGA-6eVa5AvcleQFS4gKaO_GWMq4_khLmBL6hM1sS3JIQPP2dfD0EpMiF3");'></div>
-            <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
-              <p class="text-white text-2xl font-semibold group-hover:text-blue-300 transition-colors">工具區</p>
-            </div>
-          </div>
-
-          <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-lg" data-zone="zone-teach">
-            <div class="aspect-square bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBL4tODmuFQhmwlyANmpYzx1DiXvV-tJwbYim_JlLsLxT_bzzOLdkaEf4RWVSQV_x5n7chQFGY9HScJKdk0NM4jNagLHveR8zTBNVb_l7HSI-_g5VT6aMBh1jLh-cxIewCLQS61QzD80JDyrwzOQQYkZDle0pUQ4lXddyeyYvBmYVwYpAiEPdSWYrMlFJkSsjpElpy9m_lio6-w6RGDf-GDaejH0lDt-f85jEkaTyZjwJNtxDukVxYPipJi0_8Ysskyp3fwDgbV2AkR");'></div>
-            <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
-              <p class="text-white text-2xl font-semibold group-hover:text-blue-300 transition-colors">教學區</p>
-            </div>
-          </div>
-
-          <div class="zone-card text-center cursor-pointer group relative overflow-hidden rounded-lg" data-zone="zone-admin">
-            <div class="aspect-square bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZi7jCwJCkp3UOfhdZ3JGC1uUavCk0fQHYLm_kfY7D9EB8vWNfcvBin_G8wy1cjdn2tf51Leu4jxivD64PjKsr_LFBvhsmuH2eQfMByEOsWzWiJRjYS0rm1G4AtKPU6LK6MuBC7o1BbIF4xOWp0EZwg2sv88oBYhIK44L4pHpg2cFtdiX32K9MmiIn_anp4y4UzrWEtmJ1Lod_qIuXAjVnue-dgQMiUZW3C7AYfbzwUUVX9V7jCqWxyZVx7TB0cAm75xixPyeKcdtY");'></div>
-            <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
-              <p class="text-white text-2xl font-semibold group-hover:text-blue-300 transition-colors">行政區</p>
-            </div>
-          </div>
-
-        </div>
-
-            <div class="mt-8 space-y-6">
+            <!-- Dynamic Content Area -->
+            <div class="mt-10 min-h-[300px]">
               <div id="zone-ai" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">AI 區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🤖 AI 工具</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://chat.openai.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">ChatGPT</a>
-                      <a href="https://claude.ai/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Claude</a>
-                      <a href="https://www.perplexity.ai/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Perplexity</a>
-                        
+                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">AI 區</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fas fa-robot text-blue-500"></i> AI 工具</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://chat.openai.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">ChatGPT</a>
+                      <a href="https://claude.ai/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-600">Claude</a>
+                      <a href="https://www.perplexity.ai/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-teal-50 hover:text-teal-600">Perplexity</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🚀 Google AI</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://makersuite.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Google AI Studio</a>
-                      <a href="https://notebooklm.google/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Notebook LM</a>
-                      <a href="https://gemini.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Gemini</a>
-                      <a href="https://stitch.withgoogle.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Stitch</a>                   
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fab fa-google text-red-500"></i> Google AI</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://makersuite.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">Google AI Studio</a>
+                      <a href="https://notebooklm.google/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-600">Notebook LM</a>
+                      <a href="https://gemini.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">Gemini</a>
+                      <a href="https://stitch.withgoogle.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-600">Stitch</a>
+                    </div>
+                  </div>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800 flex items-center justify-center gap-2"><i class="fas fa-graduation-cap text-green-500"></i> 教育用</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://app.edcafe.ai/me/home" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-600">EDcafe</a>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div id="zone-relax" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">放鬆區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🎈 社群平台</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://www.facebook.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">放鬆區</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-users text-indigo-500 mr-2"></i>社群平台</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://www.facebook.com/" target="_blank" class="btn bg-stone-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
                         <i class="fab fa-facebook mr-2"></i>Facebook
                       </a>
-                      <a href="https://www.instagram.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://www.instagram.com/" target="_blank" class="btn bg-stone-100 hover:bg-pink-100 hover:text-pink-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
                         <i class="fab fa-instagram mr-2"></i>Instagram
                       </a>
-                      <a href="https://www.threads.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://www.threads.net/" target="_blank" class="btn bg-stone-100 hover:bg-stone-200 hover:text-black rounded-lg px-4 py-3 text-center font-medium text-stone-700">
                         <i class="fas fa-at mr-2"></i>Threads
                       </a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🎬 影片區</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://www.youtube.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-play-circle text-red-500 mr-2"></i>影片區</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://www.youtube.com/" target="_blank" class="btn bg-stone-100 hover:bg-red-100 hover:text-red-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
                         <i class="fab fa-youtube mr-2"></i> YouTube
                       </a>
-                      <a href="https://94580.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://94580.net/" target="_blank" class="btn bg-stone-100 hover:bg-green-100 hover:text-green-700 rounded-lg px-4 py-3 text-center font-medium text-stone-700">
                         <i class="fas fa-film mr-2"></i> 94580
                       </a>
                     </div>
                   </div>
-
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🛍️ 購物</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://www.momoshop.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">momo購物網</a>
-                      <a href="https://shopee.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">蝦皮購物</a>
-                      <a href="https://24h.pchome.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">PChome 24h購物</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800"><i class="fas fa-shopping-cart text-orange-500 mr-2"></i>購物</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://www.momoshop.com.tw/" target="_blank" class="btn bg-stone-100 hover:bg-pink-50 hover:text-pink-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">momo購物網</a>
+                      <a href="https://shopee.tw/" target="_blank" class="btn bg-stone-100 hover:bg-orange-50 hover:text-orange-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">蝦皮購物</a>
+                      <a href="https://24h.pchome.com.tw/" target="_blank" class="btn bg-stone-100 hover:bg-blue-50 hover:text-blue-600 rounded-lg px-4 py-3 text-center font-medium text-stone-700">PChome 24h購物</a>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div id="zone-tools" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">工具區</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🛠️ 數位工具</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://drive.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">工具區</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🛠️ 數位工具</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://drive.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">
                         <i class="fas fa-hdd mr-2"></i> Google雲端
                       </a>
-                      <a href="https://www.notion.so/ad970127ad4b44b79326d0123a8ba087" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://www.notion.so/ad970127ad4b44b79326d0123a8ba087" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-200 hover:text-black">
                         <i class="fas fa-book mr-2"></i> Notion
                       </a>
-                      <a href="https://keep.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://keep.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">
                         <i class="fas fa-sticky-note mr-2"></i> Keep
                       </a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🔧 常用工具</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://calendar.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🔧 常用工具</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://calendar.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
                         <i class="fas fa-calendar mr-2"></i> Google 日曆
                       </a>
-                      <a href="https://mail.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://mail.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">
                         <i class="fas fa-envelope mr-2"></i> Gmail 信箱
                       </a>
-                      <a href="https://translate.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://translate.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
                         <i class="fas fa-language mr-2"></i> Google 翻譯
                       </a>
-                      <a href="https://github.com/chuoneone" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://github.com/chuoneone" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-800 hover:text-white">
                         <i class="fab fa-github mr-2"></i> GitHub
                       </a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📄 文書區</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://docs.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📄 文書區</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://docs.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">
                         <i class="fas fa-file-alt mr-2"></i>Google 文件
                       </a>
-                      <a href="https://slides.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://slides.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">
                         <i class="fas fa-file-powerpoint mr-2"></i>Google 簡報
                       </a>
-                      <a href="https://sheets.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://sheets.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">
                         <i class="fas fa-file-excel mr-2"></i>Google 試算表
                       </a>
-                      <a href="https://forms.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">
+                      <a href="https://forms.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">
                         <i class="fas fa-list-alt mr-2"></i>Google 表單
                       </a>
                     </div>
@@ -333,140 +428,140 @@
               </div>
               
               <div id="zone-teach" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">教學資源</h3>
+                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">教學資源</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📁 書商資源</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林</a>
-                      <a href="https://nanibox3.oneclass.com.tw/resource" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">南一</a>
-                      <a href="https://digitalmaster.knsh.com.tw/v3/pages/j/index.html#year=1141&field=ma&grade=1%E5%B9%B4%E7%B4%9A&item=ebook&bookcase=online" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒</a>
-                      <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林Wordwall</a>
-                      <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒Wordwall</a>
-                      <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林數位學習平台</a>
-                      <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林期刊大師</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📁 書商資源</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://edisc3.hle.com.tw/edisc_v3/ebook_v2023.html#year=111上" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林</a>
+                      <a href="https://nanibox3.oneclass.com.tw/resource" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">南一</a>
+                      <a href="https://digitalmaster.knsh.com.tw/v3/pages/j/index.html#year=1141&field=ma&grade=1%E5%B9%B4%E7%B4%9A&item=ebook&bookcase=online" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒</a>
+                      <a href="https://wordwall.net/teacher/393914/hanlindigi/folder/219571/翰林國中英語" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">翰林Wordwall</a>
+                      <a href="https://digitalmaster.knsh.com.tw/all/wordwall/#j" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-600">康軒Wordwall</a>
+                      <a href="https://hanlindigi.hle.com.tw/main" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林數位學習平台</a>
+                      <a href="https://mgz.hle.com.tw/index.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林期刊大師</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🛠️ 常用工具</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://classroom.google.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Classroom</a>
-                      <a href="https://soundoftext.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">文字轉語音</a>
-                      <a href="https://login.microsoftonline.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Office365</a>
-                      <a href="https://www.canva.com/zh_tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Canva</a>
-                      <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">計時</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🛠️ 常用工具</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://classroom.google.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">Classroom</a>
+                      <a href="https://soundoftext.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">文字轉語音</a>
+                      <a href="https://login.microsoftonline.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">Office365</a>
+                      <a href="https://www.canva.com/zh_tw/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Canva</a>
+                      <a href="https://naozhong.tw/設置計時器-5-分鐘/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">計時</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🎮 互動軟體</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Wordwall</a>
-                      <a href="https://quizizz.com/admin" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Quizizz</a>
-                      <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Blooket</a>
-                      <a href="https://www.gimkit.com/me" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Gimkit</a>
-                      <a href="https://create.kahoot.it/auth/login" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Kahoot</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🎮 互動軟體</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://wordwall.net/account/login?redirectto=%2Fmyactivities" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">Wordwall</a>
+                      <a href="https://quizizz.com/admin" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Quizizz</a>
+                      <a href="https://dashboard.blooket.com/my-sets" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">Blooket</a>
+                      <a href="https://www.gimkit.com/me" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">Gimkit</a>
+                      <a href="https://create.kahoot.it/auth/login" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Kahoot</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🌟 上課用</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://aaclearningbackend.azurewebsites.net/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">AAC</a>
-                      <a href="https://www.learnmode.net/home/teach_courses" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">學習吧</a>
-                      <a href="https://teach.classdojo.com/#/login?redirect=%2Fclasses%2F6265f96593f3ace4537b5a94%2Fpoints" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">ClassDojo</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🌟 上課用</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://aaclearningbackend.azurewebsites.net/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">AAC</a>
+                      <a href="https://www.learnmode.net/home/teach_courses" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">學習吧</a>
+                      <a href="https://teach.classdojo.com/#/login?redirect=%2Fclasses%2F6265f96593f3ace4537b5a94%2Fpoints" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">ClassDojo</a>
+                      <a href="https://sites.google.com/view/specialchu/home" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">線上學習區</a>
                     </div>
                   </div>
                 </div>
-
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🧮 數學相關</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">子由數學</a>
-                      <a href="https://subjects.modernedu.hk/mce/apps/maths/www.mceducation.com.hk/apps/maths/index_ce.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">數學app</a>
-                      <a href="https://polypad.amplify.com/p" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">mathigon</a>
-                      <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒互動遊戲區</a>
-                      <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">繪圖計算機</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🧮 數學相關</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://emath.math.ncu.edu.tw/e_school/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">子由數學</a>
+                      <a href="https://subjects.modernedu.hk/mce/apps/maths/www.mceducation.com.hk/apps/maths/index_ce.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">數學app</a>
+                      <a href="https://polypad.amplify.com/p" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">mathigon</a>
+                      <a href="https://digitalmaster.knsh.com.tw/ju/math/webgames/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒互動遊戲區</a>
+                      <a href="https://www.geogebra.org/graphing?lang=zh-TW" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">繪圖計算機</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📝 國文相關</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">雄筆順</a>
-                      <a href="https://digitalmaster.knsh.com.tw/ju/chinese/matchgame/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">語文常識配對</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📝 國文相關</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://gsyan888.github.io/html5_fun/html5_stroke_parts/html5_stroke_parts.html" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">雄筆順</a>
+                      <a href="https://digitalmaster.knsh.com.tw/ju/chinese/matchgame/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-yellow-50 hover:text-yellow-700">語文常識配對</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">💡 引起動機</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://digitalmaster.knsh.com.tw/ju/math/wake-up/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">腦力活化</a>
-                      <a href="https://toytheater.com/category/play/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">Toy Theater</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">💡 引起動機</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://digitalmaster.knsh.com.tw/ju/math/wake-up/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">腦力活化</a>
+                      <a href="https://toytheater.com/category/play/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">Toy Theater</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">❓ 出題</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://nanipaper.oneclass.com.tw/login" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">南一出題</a>
-                      <a href="https://quiz.knsh.com.tw/create-steps/1/3ebf6dd56e59ad0e00097783ad193dd48b3207348f0f9b2c8620f050e1dff110" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">康軒出題</a>
-                      <a href="https://testbank.hle.com.tw/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">翰林出題</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">❓ 出題</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://nanipaper.oneclass.com.tw/login" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">南一出題</a>
+                      <a href="https://quiz.knsh.com.tw/create-steps/1/3ebf6dd56e59ad0e00097783ad193dd48b3207348f0f9b2c8620f050e1dff110" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">康軒出題</a>
+                      <a href="https://testbank.hle.com.tw/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">翰林出題</a>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div id="zone-admin" class="zone-content hidden">
-                <h3 class="text-lg font-bold mb-6">行政資源</h3>
+                <h3 class="text-2xl font-bold mb-6 text-stone-700 border-l-4 border-stone-500 pl-3">行政資源</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">👥 行政</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://www.set.edu.tw/default.asp" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">特通網</a>
-                      <a href="https://eschool.hlc.edu.tw/web-sso/rest/Redirect/login/page/normal?returnUrl=https://eschool.hlc.edu.tw/WebAuth.do" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">全誼</a>
-                      <a href="https://news.hlc.edu.tw/index.php?cate_id=10&page=department" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">處務公告</a>
-                      <a href="https://srec.hlc.edu.tw/index.php" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">特教資源網</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">👥 行政</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://www.set.edu.tw/default.asp" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">特通網</a>
+                      <a href="https://eschool.hlc.edu.tw/web-sso/rest/Redirect/login/page/normal?returnUrl=https://eschool.hlc.edu.tw/WebAuth.do" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">全誼</a>
+                      <a href="https://news.hlc.edu.tw/index.php?cate_id=10&page=department" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">處務公告</a>
+                      <a href="https://srec.hlc.edu.tw/index.php" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">特教資源網</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📋 研習</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://special.moe.gov.tw/#/menuLayout/register/study" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">特教研習</a>
-                      <a href="https://www1.inservice.edu.tw/index2-3.aspx" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">全國研習</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📋 研習</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://special.moe.gov.tw/#/menuLayout/register/study" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-purple-50 hover:text-purple-700">特教研習</a>
+                      <a href="https://www1.inservice.edu.tw/index2-3.aspx" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">全國研習</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">📝 鑑定</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://drive.google.com/drive/folders/15F9f5dW6PHYode_w1opdEKLYkoNKmnMe" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">鑑定表單</a>
-                      <a href="http://spec.ntct.edu.tw/FileUploadCategoryListC003100.aspx?CategoryID=8da4d43d-3dd6-401a-8746-1ca93e53910e" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">計分EXCEL</a>
-                      <a href="https://sec.ntpc.edu.tw/p/406-1004-9160,r140.php" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">情緒處理表件</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">📝 鑑定</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://drive.google.com/drive/folders/15F9f5dW6PHYode_w1opdEKLYkoNKmnMe" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-green-50 hover:text-green-700">鑑定表單</a>
+                      <a href="http://spec.ntct.edu.tw/FileUploadCategoryListC003100.aspx?CategoryID=8da4d43d-3dd6-401a-8746-1ca93e53910e" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">計分EXCEL</a>
+                      <a href="https://sec.ntpc.edu.tw/p/406-1004-9160,r140.php" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-red-50 hover:text-red-700">情緒處理表件</a>
                     </div>
                   </div>
-                  <div class="p-4 border rounded-lg shadow bg-white">
-                    <h4 class="text-center text-base font-bold mb-3">🎨 素材</h4>
-                    <div class="flex flex-col gap-2">
-                      <a href="https://www.irasutoya.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">irasutoya</a>
-                      <a href="https://www.flaticon.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">icon</a>
-                      <a href="https://chojugiga.com/" target="_blank" class="btn bg-gray-200 hover:bg-gray-300 rounded px-4 py-2 text-center transition-colors">鳥獸圖</a>
+                  <div class="p-5 border border-stone-200 rounded-xl shadow-sm bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <h4 class="text-center text-lg font-bold mb-4 text-stone-800">🎨 素材</h4>
+                    <div class="flex flex-col gap-3">
+                      <a href="https://www.irasutoya.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-orange-50 hover:text-orange-700">irasutoya</a>
+                      <a href="https://www.flaticon.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-blue-50 hover:text-blue-700">icon</a>
+                      <a href="https://chojugiga.com/" target="_blank" class="btn bg-stone-100 text-stone-700 rounded-lg px-4 py-3 text-center font-medium hover:bg-gray-100 hover:text-gray-900">鳥獸圖</a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
-      <footer class="footer-morandi">
+      <footer class="footer-morandi mt-auto">
         Created by Chu Pei Yi
       </footer>
 
     </div>
-
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const countdownElement = document.getElementById('countdown');
         const zones = document.querySelectorAll('.zone-content');
         const navLinks = document.querySelectorAll('.nav-link');
         const zoneCards = document.querySelectorAll('.zone-card');
-        const heroExploreButton = document.getElementById('heroExploreButton');
         const exploreSectionTitle = document.getElementById('explore-section-title');
         
         const hamburgerButton = document.getElementById('hamburger-button');
@@ -480,31 +575,29 @@
         let activeZoneId = null; 
         let memos = [];
 
-        // --- Slideshow Functionality ---
+        // --- Slideshow Functionality (Improved) ---
         const slideshowContainer = document.getElementById('slideshow-container');
         if (slideshowContainer) {
             const slideshowImageElement = document.getElementById('slideshow-image');
-            // 使用您提供的圖片檔案名稱
             const slideshowImages = ['dog1.png', 'dog2.png', 'dog3.png', 'dog4.png', 'dog5.png', 'dog6.png']; 
             let currentImageIndex = 0;
 
             if (slideshowImageElement && slideshowImages.length > 0) {
-                slideshowImageElement.src = slideshowImages[0]; // 設定初始圖片
+                slideshowImageElement.src = slideshowImages[0]; 
 
                 function changeSlide() {
-                    slideshowImageElement.style.opacity = 0; // 開始淡出
-
+                    // Use CSS Opacity transition defined in Tailwind classes
+                    slideshowImageElement.style.opacity = 0;
+                    
                     setTimeout(() => {
                         currentImageIndex = (currentImageIndex + 1) % slideshowImages.length;
                         slideshowImageElement.src = slideshowImages[currentImageIndex];
-                        slideshowImageElement.style.opacity = 1; // 開始淡入
-                    }, 700); // 淡出動畫時間 (應與 CSS transition duration 相同)
+                        slideshowImageElement.style.opacity = 1;
+                    }, 700); 
                 }
-                // 每5秒更換一次圖片 (5000毫秒)
                 setInterval(changeSlide, 5000); 
             }
         }
-
 
         // --- Countdown Function ---
         function updateCountdown() {
@@ -514,36 +607,48 @@
           const diffTime = targetDate - today;
           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-          countdownElement.innerHTML = ''; 
-          countdownElement.classList.remove('text-green-300', 'text-yellow-300', 'text-red-300');
-
+          // Reset classes slightly
+          countdownElement.className = "text-3xl sm:text-5xl font-black tracking-tight drop-shadow-lg transition-all duration-500 transform hover:scale-105 cursor-default";
 
           if (diffDays > 7) {
-            countdownElement.innerHTML = `寒假還有 <span class="font-black text-outline-black">${diffDays}</span> 天`;
-
+            countdownElement.innerHTML = `寒假還有 <span class="text-outline-black">${diffDays}</span> 天`;
           } else if (diffDays > 0) {
-            countdownElement.innerHTML = `寒假倒數 <span class="font-black text-red-400 animate-pulse">${diffDays}</span> 天！`;
+            countdownElement.innerHTML = `寒假倒數 <span class="text-red-400 animate-pulse drop-shadow-xl">${diffDays}</span> 天！`;
           } else if (diffDays === 0) {
-              countdownElement.innerHTML = `<span class="font-black text-green-300 animate-bounce">寒假就是今天！🎉</span>`;
+              countdownElement.innerHTML = `<span class="text-green-300 animate-bounce drop-shadow-xl">寒假就是今天！🎉</span>`;
           } else {
             const daysPast = Math.abs(diffDays);
-            countdownElement.innerHTML = `寒假已過 <span class="font-black text-sky-300">${daysPast}</span> 天`;
+            countdownElement.innerHTML = `寒假已過 <span class="text-sky-300 drop-shadow-xl">${daysPast}</span> 天`;
           }
         }
 
-        // --- Zone Display Functions ---
+        // --- Zone Display Functions (Added Animation) ---
         function showZone(zoneId, shouldScroll = true) {
-          zones.forEach((zone) => zone.classList.add('hidden'));
+          // 1. Hide all zones
+          zones.forEach((zone) => {
+              zone.classList.add('hidden');
+              zone.classList.remove('animate-fade-in-up'); // Reset animation
+          });
           
           const targetZone = document.getElementById(zoneId);
           if (targetZone) {
             targetZone.classList.remove('hidden');
+            
+            // 2. Trigger Reflow to restart animation
+            void targetZone.offsetWidth; 
+            
+            // 3. Add Animation Class
+            targetZone.classList.add('animate-fade-in-up');
+
             activeZoneId = zoneId; 
 
             if (shouldScroll) {
               setTimeout(() => {
-                targetZone.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }, 0);
+                // Scroll with a bit of offset for header
+                const yOffset = -90; 
+                const y = targetZone.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+              }, 100);
             }
           } else {
             activeZoneId = null; 
@@ -555,10 +660,8 @@
           navLinks.forEach(link => {
             if (link.dataset.zone === activeZoneId) {
               link.classList.add('active'); 
-              link.classList.remove('text-sky-100'); // Default non-active color
             } else {
               link.classList.remove('active');
-              link.classList.add('text-sky-100'); // Ensure non-active color
             }
           });
         }
@@ -568,67 +671,86 @@
             hamburgerButton.addEventListener('click', () => {
                 const isMenuOpen = !mobileMenu.classList.contains('hidden');
                 mobileMenu.classList.toggle('hidden');
+                
+                // Add simple animation to menu appearance
+                if(!isMenuOpen) {
+                    mobileMenu.classList.add('animate-fade-in-up');
+                } else {
+                    mobileMenu.classList.remove('animate-fade-in-up');
+                }
+
                 const icon = hamburgerButton.querySelector('svg');
                 if (!isMenuOpen) { 
-                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
                 } else { 
-                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+                     icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
                 }
             });
 
             mobileMenu.querySelectorAll('a.nav-link').forEach(link => {
                 link.addEventListener('click', () => {
                     if (window.innerWidth < 768) { 
-                        mobileMenu.classList.add('hidden');
-                        hamburgerButton.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
+                         mobileMenu.classList.add('hidden');
+                         hamburgerButton.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>';
                     }
                 });
             });
         }
 
-        // --- Memo (Notes) Functionality with LocalStorage ---
+        // --- Memo (Notes) Functionality ---
         function loadMemos() {
             const storedMemos = localStorage.getItem(LOCAL_STORAGE_MEMO_KEY);
             if (storedMemos) {
                 memos = JSON.parse(storedMemos);
             }
-            renderMemos();
+            renderMemos(false); // false = don't animate on initial load
         }
 
         function saveMemos() {
             localStorage.setItem(LOCAL_STORAGE_MEMO_KEY, JSON.stringify(memos));
         }
 
-        function renderMemos() {
+        function renderMemos(animate = true) {
             if (!memoListContainer) return;
             memoListContainer.innerHTML = ''; 
+            
             if (memos.length === 0) {
-                const emptyMessage = document.createElement('p');
-                emptyMessage.textContent = '還沒有備忘錄，快新增一個吧！';
-                emptyMessage.classList.add('text-gray-400', 'text-xs', 'sm:text-sm', 'italic', 'text-center', 'py-2');
+                const emptyMessage = document.createElement('div');
+                emptyMessage.innerHTML = '<i class="far fa-folder-open mb-2 text-2xl opacity-50"></i><p>暫無備忘事項</p>';
+                emptyMessage.classList.add('text-gray-300', 'text-xs', 'sm:text-sm', 'italic', 'text-center', 'py-4', 'flex', 'flex-col', 'items-center');
                 memoListContainer.appendChild(emptyMessage);
                 return;
             }
 
-            memos.forEach(memo => {
+            memos.forEach((memo, index) => {
                 const memoItemDiv = document.createElement('div');
-                memoItemDiv.classList.add('memo-item', 'flex', 'justify-between', 'items-center', 'bg-white', 'bg-opacity-10', 'hover:bg-opacity-20', 'p-1.5', 'sm:p-2', 'rounded', 'text-xs', 'sm:text-sm', 'transition-colors');
+                // Basic classes
+                memoItemDiv.classList.add('memo-item', 'flex', 'justify-between', 'items-center', 'bg-white/10', 'hover:bg-white/20', 'p-2', 'rounded-lg', 'text-xs', 'sm:text-sm', 'transition-all', 'border', 'border-white/5');
+                
+                // Animation class
+                if(animate && index === 0) {
+                    memoItemDiv.classList.add('memo-item-enter');
+                }
+                
                 memoItemDiv.dataset.id = memo.id;
 
                 const memoTextSpan = document.createElement('span');
-                memoTextSpan.classList.add('text-gray-100', 'break-all', 'mr-2', 'flex-grow');
+                memoTextSpan.classList.add('text-gray-100', 'break-all', 'mr-2', 'flex-grow', 'font-medium');
                 memoTextSpan.textContent = memo.text;
 
                 const deleteButton = document.createElement('button');
-                deleteButton.classList.add('text-red-300', 'hover:text-red-400', 'focus:text-red-500', 'text-xs', 'sm:text-sm', 'px-1.5', 'py-0.5', 'font-semibold', 'flex-shrink-0', 'rounded', 'transition-colors');
-                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteButton.classList.add('text-red-300', 'hover:text-red-400', 'hover:bg-red-400/20', 'focus:text-red-500', 'w-6', 'h-6', 'flex', 'items-center', 'justify-center', 'rounded-full', 'transition-colors');
+                deleteButton.innerHTML = '<i class="fas fa-times"></i>';
                 deleteButton.setAttribute('aria-label', '刪除備忘');
-                deleteButton.setAttribute('title', '刪除此備忘');
-
 
                 deleteButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); 
-                    deleteMemo(memo.id);
+                    e.stopPropagation();
+                    // Add exit animation
+                    memoItemDiv.style.transform = 'translateX(20px)';
+                    memoItemDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        deleteMemo(memo.id);
+                    }, 200);
                 });
 
                 memoItemDiv.appendChild(memoTextSpan);
@@ -652,14 +774,14 @@
             memos.unshift(newMemo); 
             memoInput.value = ''; 
             saveMemos();
-            renderMemos();
+            renderMemos(true); // Animate the new item
             memoInput.focus();
         }
 
         function deleteMemo(id) {
             memos = memos.filter(memo => memo.id !== id);
             saveMemos();
-            renderMemos();
+            renderMemos(false);
         }
 
         if (addMemoButton) {
@@ -702,13 +824,10 @@
           });
         });
         
-        if (heroExploreButton && exploreSectionTitle) {
-            heroExploreButton.addEventListener('click', () => {
-                exploreSectionTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
+        if (exploreSectionTitle) {
+             // Optional: Add click listener to header to scroll down
         }
       });
     </script>
   </body>
-
 </html>
